@@ -53,7 +53,8 @@ function getCommonConfiguration(filename,pathBase='./dist')
         devtool: 'source-map',
         stats: {
             colors:true
-        }
+        },
+       
     }
     return config; 
     

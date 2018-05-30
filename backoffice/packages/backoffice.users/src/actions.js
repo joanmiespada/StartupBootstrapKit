@@ -1,4 +1,5 @@
-import fetch from 'cross-fetch';
+import fetch from 'cross-fetch'
+import mapping from './mapping'
 
 export const USER_GETALL_REQUEST = 'USER_GETALL_REQUEST';
 export const USER_GETALL_RESPONSE = 'USER_GETALL_RESPONSE';
@@ -55,8 +56,13 @@ export const getAllUsers = (config, pageSize, pageNum) => (
           return;
         }
 
+        console.log(response.data)
+
+        const users = mapping.listOfUserFromApiToModel(response.data)
        
-        dispatch(GetAllOnReceived(response.data ));
+        console.log(users)
+
+        dispatch(GetAllOnReceived( users ));
         resolve(true);
          
         

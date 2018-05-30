@@ -1,11 +1,11 @@
 import React from 'react';
 //import { connect } from 'react-redux';
 // import { Dialog, Input, ProgressBar } from 'react-toolbox';
-//import { Table } from 'react-toolbox';
+import { Table } from 'react-toolbox';
 // import PropTypes from 'prop-types';
 // import { login } from './actions';
 
-/*
+
 const UserModel = {
   name: { type: String },
   twitter: { type: String },
@@ -14,7 +14,7 @@ const UserModel = {
   dogs: { type: Number },
   active: { type: Boolean },
 };
-*/
+
 const users = [{
     name: 'Javi Jimenez', twitter: '@soyjavi', birthdate: new Date(1980, 3, 11), cats: 1,
 },
@@ -26,7 +26,7 @@ export class View extends React.Component {
     constructor() {
         super()
         this.state = { selected: [], source: users }
-    }/*
+    }
     handleChange = (row, key, value) => {
         const source = this.state.source;
         source[row][key] = value;
@@ -36,18 +36,12 @@ export class View extends React.Component {
     handleSelect = (selected) => {
         this.setState({selected});
     };
-*/
+
     render() {
         return (
-            <div>pepepe</div>
-        )
-    }
-}
-
-
-/*
-
-<Table
+            <div>
+                <div>sdfsdfs</div>
+                <Table
             model={UserModel}
             onChange={this.handleChange}
             onSelect={this.handleSelect}
@@ -56,5 +50,13 @@ export class View extends React.Component {
             selected={this.state.selected}
             source={this.state.source}
         />
+            </div>
+
+        )
+    }
+}
+
+/*
+  
 
 */

@@ -1,30 +1,36 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { AppBar, Layout, NavDrawer, Panel, FontIcon, Snackbar } from 'react-toolbox';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { AppBar, Layout, NavDrawer, Panel, FontIcon, Snackbar } from 'react-toolbox'
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   BrowserRouter,
-} from 'react-router-dom';
-import PropTypes from 'prop-types';
-import {View as userView} from 'backoffice-users'
+} from 'react-router-dom'
+import PropTypes from 'prop-types'
+//import * as uv from 'backoffice-users'
+import {View as UserView} from 'backoffice-users'
 
 
 import Login from '../login/Login';
 import MenuOption from './drawer/MenuOption';
 
-const Home = () => (
-  <p> Home<br />matches.</p>
-);
+console.log(UserView)
 
-//const WillMatch = () => <h3>Matched!</h3>;
+
+const Home = () => (
+  <div>
+  <p>Welcome to Backoffice.</p>
+ 
+  </div>
+);
 
 const NoMatch = () => (
   <div>
     <h3>
       No matched component
     </h3>
+    
   </div>
 );
 
@@ -76,7 +82,7 @@ class App extends Component {
               onOverlayClick={this.toggleDrawerActive}
             >
               <MenuOption close={this.toggleDrawerActive} label="User List" url="/users" />
-              <MenuOption close={this.toggleDrawerActive} label="Task List" url="/tasks" />
+
             </NavDrawer>
             <Panel>
               <AppBar
@@ -89,7 +95,7 @@ class App extends Component {
               <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
                 <Switch>
                   <Route exact path="/" component={Home} />
-                  <Route exact path="/users" component={userView} />
+                  <Route exact path="/users" component={UserView} />
                   <Route component={NoMatch} />
                 </Switch>
               </div>
