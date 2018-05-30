@@ -4,8 +4,6 @@ var dotenv = require('dotenv-webpack');
 var fs = require('fs');
 var path = require('path');
 
-var modules = {};
-
 function loadModules(folder)
 {
     var nodeModules = {};
@@ -25,7 +23,7 @@ function loadModules(folder)
     return nodeModules;
 }
 
-modules = loadModules('../../node_modules');
+var modules = loadModules('../../node_modules');
 
 function getCommonConfiguration(filename,pathBase='./build')
 {    

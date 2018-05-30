@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "pretest": "eslint -c ../../.eslintrc ./src",
-    "start": "NODE_ENV=development webpack-dev-server --config ./webpack/index.js  --inline",
-    "build": "NODE_ENV=production webpack --config ./webpack/index.js"
+    "start": "NODE_ENV=development webpack-dev-server  --config ./webpack/index.js  --inline",
+    "build:webpack:dev": "NODE_ENV=development webpack --config ./webpack/index.js",
+    "build:webpack:prod": "NODE_ENV=production webpack --config ./webpack/index.js"
   },
   "keywords": [],
   "author": "",
@@ -50,8 +51,8 @@
     "workbox-webpack-plugin": "^3.1.0"
   },
   "dependencies": {
-    "backoffice-users": "1.0.0",
     "babel-polyfill": "^6.26.0",
+    "backoffice-users": "1.0.0",
     "cross-fetch": "^2.1.1",
     "localforage": "^1.7.1",
     "lodash": "^4.17.10",

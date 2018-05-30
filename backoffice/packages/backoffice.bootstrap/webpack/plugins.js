@@ -6,6 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+//const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 //const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -23,6 +24,7 @@ const cleanOptions = {
   dry: false,
 };
 const plugins = [
+  //new DuplicatePackageCheckerPlugin(),
   //new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
   new webpack.EnvironmentPlugin({ NODE_ENV: process.env.NODE_ENV }),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),

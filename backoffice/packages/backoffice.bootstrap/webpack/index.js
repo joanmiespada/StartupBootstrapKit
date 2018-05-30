@@ -9,7 +9,7 @@ const optimize = require('./optimize');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const settings = {
-  mode: process.env.NODE_ENV,
+  mode: process.env.NODE_ENV || 'development',
   resolve: {
     extensions: ['*', '.js', '.jsx', '.css', '.scss'],
     modules: [
@@ -22,6 +22,7 @@ const settings = {
     app: [
       //'react-hot-loader/patch',
       // 'babel-polyfill',
+      //'backoffice-users',
       './src/index.jsx',
     ],
     vendor,

@@ -2,9 +2,10 @@
   "name": "backoffice-users",
   "version": "1.0.0",
   "description": "crud operations over users api",
-  "main": "index.js",
+  "main": "./dist/backoffice.users.js",
   "scripts": {
-    "pretest": "eslint -c ../../.eslintrc ./src"
+    "pretest": "eslint -c ../../.eslintrc ./src",
+    "build:webpack": "webpack --config ./webpack.config.js"
   },
   "keywords": [],
   "author": "",

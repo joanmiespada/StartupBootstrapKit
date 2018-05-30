@@ -10,6 +10,7 @@
 		"bootstrap": "lerna bootstrap",
 		"start": "lerna run start --stream",
 		"build:babel": "lerna exec --parallel -- babel ./src -d ./lib --config-file ../../.babelrc",
-		"build:webpack": "lerna run build"
+		"build:webpack:dev": "lerna exec --parallel -- NODE_ENV=development yarn build:webpack",
+		"build:webpack:prod": "lerna exec --parallel -- NODE_ENV=production yarn build:webpack"
 	}
 }
