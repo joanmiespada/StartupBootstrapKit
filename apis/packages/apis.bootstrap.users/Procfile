@@ -1,0 +1,1 @@
+web: yarn && yarn build-prod && yarn serve-prod

@@ -1,0 +1,6 @@
+webpack/*.js
+dist/
+src/service-worker.js
+**/node_modules/
+**/build/
+lib

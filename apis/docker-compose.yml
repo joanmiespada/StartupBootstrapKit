@@ -1,0 +1,27 @@
+version: '3'
+
+services: 
+  
+  userapi:
+    build: ./packages/apis.bootstrap.users
+    ports:
+      - "5081:8081"
+    depends_on: 
+      - loginapi
+  loginapi:
+    build: ./packages/apis.bootstrap.login
+    ports:
+      - "5080:8080"
+    
+networks: 
+  apis: 
+
+# Start-up
+#docker-compose up -d
+# Close
+#docker-compose down
+
+# Delete all containers
+#docker rm $(docker ps -a -q)
+# Delete all images
+#docker rmi $(docker images -q)
