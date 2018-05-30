@@ -20,8 +20,11 @@ Be aware ENV variables:
     - PASSWORD_JWT
     - PASSWORD_AES 
 
-Have been filled correctly in .env file.
+They have been filled correctly in .env file.
 
+### Test
+
+You can run the test with `yarn test` command. 
 
 
 

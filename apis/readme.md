@@ -79,11 +79,11 @@ Apis folder has been split by 5 projects:
 
 |Component | Description | Details |
 |----------|-------------|------|
-|apis.bootstrap.login| microservice for login features| [readme](./packages/apis.bootstrap.login/readme.md) |
-|apis.bootstrap.users| microservice related with user's CRUD| |
-|apis.business.login| business logic to provide login and tests| |
-|apis.business.users| business logic with features related CRUD operations for users| |
-|apis.core| shared components for bootstrap and business packages| |
+|apis.bootstrap.login| microservice for login features| [readme](./packages/apis.bootstrap.login) |
+|apis.bootstrap.users| microservice related with user's CRUD| [readme](./packages/apis.bootstrap.users) |
+|apis.business.login| business logic to provide login and tests| [readme](./packages/apis.business.login) |
+|apis.business.users| business logic with features related CRUD operations for users| [readme](./packages/apis.business.users) |
+|apis.core| shared components for bootstrap and business packages|[readme](./packages/apis.core) |
 
 ### Docker
 
@@ -91,8 +91,16 @@ If you want to run all apis together:
 
 - docker-compose up -d
 
+### Testing
+
+Business test agains storage are in business packages. 
+Api test agains api are in bootstrap packages.
+
+If you want to run all test: `yarn test` and lerna will execute this command in every package. 
+See package.json for details. 
+
 ### TODO
 
-- Several improvements 
+- Several improvements ;)
 
 

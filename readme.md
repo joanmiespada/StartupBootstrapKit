@@ -3,7 +3,7 @@
 
 |Production | Development | 
 | ----------|-------------| 
-|[![Build Status](https://travis-ci.org/joanmiespada/StartupBootstrapKit.svg?branch=production)](https://travis-ci.org/joanmiespada/StartupBootstrapKit) | [![Build Status](https://travis-ci.org/joanmiespada/StartupBootstrapKit.svg?branch=master)](https://travis-ci.org/joanmiespada/StartupBootstrapKit)  |
+|[![Build Status](https://travis-ci.org/joanmiespada/StartupBootstrapKit.svg?branch=production)](https://travis-ci.org/joanmiespada/StartupBootstrapKit) | [![Build Status](https://travis-ci.org/joanmiespada/StartupBootstrapKit.svg?branch=develop)](https://travis-ci.org/joanmiespada/StartupBootstrapKit)  |
 
 
 ### What is Startup Bootstrap Kit (SBK)?
@@ -29,8 +29,8 @@ Storage: we are using Google Firebase.
 
 | Solution | Description    |
 |----------|----------------|
-|[API - Microservices](./apis/readme.md) | Back-end infrastructure such as REST api, microservices, storage, etcetera.  |
-|[BackOffice](./backoffice/readme.md) | Front-end for internal use: manage users or other business' tasks performed by organization's people |  
+|[API - Microservices](./apis) | Back-end infrastructure such as REST api, microservices, storage, etcetera.  |
+|[BackOffice](./backoffice) | Front-end for internal use: manage users or other business' tasks performed by organization's people |  
 |FrontOffice | Under construction. All activities for the final user or customer | 
 
 ### How you can start?
