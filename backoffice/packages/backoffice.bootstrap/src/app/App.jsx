@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { AppBar, Layout, NavDrawer, Panel, FontIcon, Snackbar } from 'react-toolbox'
+import { Table, TableHead, TableRow, TableCell } from 'react-toolbox'
 import {
   BrowserRouter as Router,
   Route,
@@ -8,7 +9,7 @@ import {
   BrowserRouter,
 } from 'react-router-dom'
 import PropTypes from 'prop-types'
-//import * as uv from 'backoffice-users'
+
 import {View as UserView} from 'backoffice-users'
 
 
@@ -18,10 +19,37 @@ import MenuOption from './drawer/MenuOption';
 console.log(UserView)
 
 
+const UserModel = {
+  name: { type: String },
+  twitter: { type: String },
+  birthdate: { type: Date, title: 'Date of Birth' },
+  cats: { type: Number },
+  dogs: { type: Number },
+  active: { type: Boolean },
+};
+
+const users = [{
+    name: 'Javi Jimenez', twitter: '@soyjavi', birthdate: new Date(1980, 3, 11), cats: 1,
+},
+  { name: 'Javi Velasco', twitter: '@javivelasco', birthdate: new Date(1987, 1, 1), dogs: 1, active: true }
+];
+
 const Home = () => (
   <div>
   <p>Welcome to Backoffice.</p>
- 
+  <Table>
+    <TableHead>
+      <TableCell>Name</TableCell>
+      <TableCell>Surname</TableCell>
+    </TableHead>
+    {users.map((item,idx) => {
+      <TableRow key={idx}>
+        <TableCell>{item.name}</TableCell>
+        <TableCell>{item.surname}</TableCell>
+      </TableRow>
+    })}
+  </Table>
+  <p>....</p>
   </div>
 );
 
