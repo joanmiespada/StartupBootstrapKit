@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Dialog, Input, ProgressBar } from 'react-toolbox';
+//import { Dialog, Input, ProgressBar } from 'react-toolbox';
 import PropTypes from 'prop-types';
-import { login } from './Actions';
+import { login } from './actions';
 
 
-class Login extends React.Component {
+export class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +19,7 @@ class Login extends React.Component {
   handleChange = name => (value) => {
     this.setState({ ...this.state, [name]: value }, () => {
       const validate = (email) => {
-        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;  //eslint-disable-line no-useless-escape
         return re.test(email);
       };
       const valid = (validate(this.state.email) && this.state.passw.length > 0) ? true : false;
@@ -46,10 +46,10 @@ class Login extends React.Component {
       errorMessage.push((<span style={red}> {this.state.formErrors.email} </span>));
     }
 
-    let progressbar = null;
+    /*let progressbar = null;
     if (this.props.isFetching) {
       progressbar = (<ProgressBar type="circular" mode="indeterminate" multicolor />);
-    }
+    }*/
 
     const actions = [
       {
@@ -62,8 +62,35 @@ class Login extends React.Component {
       { label: 'Close', onClick: this.props.handleToggle },
     ];
 
-    return (
-      <Dialog
+    return (<div>Login</div>
+      );
+  }
+}
+
+Login.propTypes = {
+  showme: PropTypes.bool.isRequired,
+  handleToggle: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  loginMethod: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  let { loginSpining } = state;
+
+  if (loginSpining === undefined) { loginSpining = false; }
+
+  return { isFetching: loginSpining };
+};
+
+const mapLoginOnRequestToProps = dispatch => ({
+  loginMethod: (email, pass) => dispatch(login(email, pass)),
+});
+
+//export default connect(mapStateToProps, mapLoginOnRequestToProps)(Login);
+
+/*
+
+<Dialog
         actions={actions}
         active={this.props.showme}
         onEscKeyDown={this.props.handleToggle}
@@ -88,28 +115,7 @@ class Login extends React.Component {
           onChange={this.handleChange('passw')}
         />
         {errorMessage}
-      </Dialog>);
-  }
-}
+      </Dialog>
 
-Login.propTypes = {
-  showme: PropTypes.bool.isRequired,
-  handleToggle: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  loginMethod: PropTypes.func.isRequired,
-};
 
-const mapStateToProps = (state) => {
-  let { loginSpining } = state;
-
-  if (loginSpining === undefined) { loginSpining = false; }
-
-  return { isFetching: loginSpining };
-};
-
-const mapLoginOnRequestToProps = dispatch => ({
-  loginMethod: (email, pass) => dispatch(login(email, pass)),
-});
-
-export default connect(mapStateToProps, mapLoginOnRequestToProps)(Login);
-
+*/

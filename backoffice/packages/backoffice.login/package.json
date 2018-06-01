@@ -1,13 +1,11 @@
 {
-  "name": "backoffice-bootstrap",
+  "name": "backoffice-login",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "login operative",
+  "main": "./dist/backoffice.login.js",
   "scripts": {
     "pretest": "eslint -c ../../.eslintrc ./src",
-    "start": "NODE_ENV=development webpack-dev-server  --config ./webpack/index.js  --inline",
-    "build:webpack:dev": "NODE_ENV=development webpack --config ./webpack/index.js",
-    "build:webpack:prod": "NODE_ENV=production webpack --config ./webpack/index.js"
+    "build:webpack": "webpack --config ./webpack.config.js"
   },
   "keywords": [],
   "author": "",
@@ -52,10 +50,10 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "backoffice-users": "1.0.0",
     "cross-fetch": "^2.1.1",
     "localforage": "^1.7.1",
     "lodash": "^4.17.10",
+    "material-ui": "1.0.0-beta.41",
     "moment": "^2.22.1",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
@@ -66,7 +64,6 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
-    "react-toolbox": "^2.0.0-beta.12",
     "react-virtualized": "^9.18.5",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",

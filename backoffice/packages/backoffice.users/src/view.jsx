@@ -1,7 +1,6 @@
 import React from 'react';
 //import { connect } from 'react-redux';
 // import { Dialog, Input, ProgressBar } from 'react-toolbox';
-import { Table } from 'react-toolbox';
 // import PropTypes from 'prop-types';
 // import { login } from './actions';
 
@@ -40,16 +39,8 @@ export class View extends React.Component {
     render() {
         return (
             <div>
-                <div>sdfsdfs</div>
-                <Table
-            model={UserModel}
-            onChange={this.handleChange}
-            onSelect={this.handleSelect}
-            selectable
-            multiSelectable
-            selected={this.state.selected}
-            source={this.state.source}
-        />
+                <div>Users</div>
+                
             </div>
 
         )

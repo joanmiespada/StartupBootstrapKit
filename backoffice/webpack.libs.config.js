@@ -1,6 +1,8 @@
 'use strict';
 var fs = require('fs');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 function loadModules(folder)
 {
     var nodeModules = {};
@@ -50,7 +52,7 @@ function getCommonConfiguration(filename,pathBase='./dist')
                 }
             ]
         },
-        devtool: 'source-map',
+        devtool: isProduction ? 'source-map': 'cheap-module-eval-source-map',
         stats: {
             colors:true
         },

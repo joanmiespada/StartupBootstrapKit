@@ -2,7 +2,7 @@ import {
   LOGIN_REQUEST,
   LOGIN_RESPONSE,
   LOGIN_FAIL,
-} from './Actions';
+} from './actions';
 
 const reducers = (state = [], action) => {
   switch (action.type) {
