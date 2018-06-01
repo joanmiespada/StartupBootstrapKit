@@ -1,13 +1,15 @@
 const { resolve, join } = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -29,17 +31,22 @@ const plugins = [
   new webpack.EnvironmentPlugin({ NODE_ENV: process.env.NODE_ENV }),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new LodashModuleReplacementPlugin(),
-  //new HtmlWebpackPlugin({
-  //  template: join('src', 'index.html'),
-  //}),
-  //new ExtractTextPlugin(join(dist, 'bundle.css'), {
-  //   allChunks: true,
-  //}),
-  //new webpack.optimize.SplitChunksPlugin({
-  //  name: 'vendor',
-  //  minChunks: Infinity,
-  //}),
-  //new webpack.NamedModulesPlugin(),
+  new HtmlWebpackPlugin({
+    template: join('public', 'index.html'),
+  }),
+  new CopyWebpackPlugin({ from: 'public', to: 'build'}, { ignore: ['*.html'] } ), // ESOTY AQUI!!!!!!!
+  new MiniCssExtractPlugin({
+    filename: isProduction ? '[name].css'  : '[name].[hash].css',
+    path: resolve(__dirname, '..', 'dist'),
+    chunkFilename:  isProduction ? '[id].css' : '[id].[hash].css',
+    
+    allChunks: true,
+  }),
+  new webpack.optimize.SplitChunksPlugin({
+    name: 'vendor',
+    minChunks: Infinity,
+  }),
+  new webpack.NamedModulesPlugin(),
 ];
 
 if (isProduction) {
@@ -61,7 +68,8 @@ if (isProduction) {
       clientsClaim: true,
       skipWaiting: true,
       navigateFallback: '/index.html',
-    })
+    }),
+    new UglifyJsPlugin()
   );
 } else {
   plugins.push(
