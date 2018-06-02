@@ -6,6 +6,8 @@ import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 
+import EmptyHomePage from "views/Dashboard/EmptyHome.jsx"
+
 import {
   Dashboard,
   Person,
@@ -17,6 +19,7 @@ import {
 } from "@material-ui/icons";
 
 const dashboardRoutes = [
+  /*
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
@@ -65,8 +68,15 @@ const dashboardRoutes = [
     navbarName: "Notifications",
     icon: Notifications,
     component: NotificationsPage
+  },*/
+  {
+    path: "/emptyhome",
+    sidebarName: "Empty Home",
+    navbarName: "Empty Home",
+    icon: Notifications,
+    component: EmptyHomePage
   },
-  { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
+  { redirect: true, path: "/", to: "/emptyhome", navbarName: "Redirect" }
 ];
 
 export default dashboardRoutes;
