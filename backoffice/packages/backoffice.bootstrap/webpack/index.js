@@ -12,10 +12,10 @@ const settings = {
   mode: process.env.NODE_ENV || 'development',
   resolve: {
     extensions: ['*', '.js', '.jsx', '.css', '.scss'],
-    alias:
+    /*alias:
     {
       'react-lifecycles-compat': resolve(__dirname, '../../../node_modules/react-lifecycles-compat')
-    },
+    },*/
     modules: [
       'node_modules',
       './src'
@@ -23,7 +23,8 @@ const settings = {
     symlinks: false,
   },
   context: resolve(__dirname, '..'),
-  entry: {
+  entry: //'./src/index.js',
+  {
     app: [
       './src/index.js',
     ],

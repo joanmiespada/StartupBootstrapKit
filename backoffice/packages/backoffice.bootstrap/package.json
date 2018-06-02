@@ -1,7 +1,7 @@
 {
   "name": "backoffice-bootstrap",
   "version": "1.0.0",
-  "description": "by Material Dashboard React - Coded by Creative Tim",
+  "description": "BackOffice sourced by Material Dashboard React - Coded by Creative Tim",
   "private": true,
   "main": "./src/index.js",
   "devDependencies": {
@@ -75,7 +75,7 @@
     "whatwg-fetch": "^2.0.4"
   },
   "scripts": {
-    "start": "",
+    "start": "NODE_ENV=development webpack-dev-server --config ./webpack/index.js",
     "build": "NODE_ENV=development webpack --config ./webpack/index.js",
     "test": ""
   },

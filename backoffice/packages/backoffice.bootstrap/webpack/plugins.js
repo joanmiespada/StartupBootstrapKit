@@ -8,8 +8,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack-plugin");
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -34,7 +32,7 @@ const plugins = [
   new HtmlWebpackPlugin({
     template: join('public', 'index.html'),
   }),
-  new CopyWebpackPlugin({ from: 'public', to: 'build'}, { ignore: ['*.html'] } ), // ESOTY AQUI!!!!!!!
+  new CopyWebpackPlugin( [{ from: './public', to: './'}] , { ignore: ['*.html'] } ), 
   new MiniCssExtractPlugin({
     filename: isProduction ? '[name].css'  : '[name].[hash].css',
     path: resolve(__dirname, '..', 'dist'),
@@ -68,8 +66,7 @@ if (isProduction) {
       clientsClaim: true,
       skipWaiting: true,
       navigateFallback: '/index.html',
-    }),
-    new UglifyJsPlugin()
+    })
   );
 } else {
   plugins.push(

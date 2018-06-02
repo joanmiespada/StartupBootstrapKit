@@ -13,6 +13,7 @@ const vendor = [
   'lodash',
   'moment',
   'localforage',
-  'react-loadable'
+  'react-loadable',
+  'material-ui'
 ];
 module.exports = vendor;
