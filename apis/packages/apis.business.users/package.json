@@ -28,7 +28,7 @@
     "mocha": "^5.0.5"
   },
   "scripts": {
-    "pretest": "eslint -c ../../.eslintrc ./src",
+    
     "build-raw": "babel src -d dist",
     "test": "jest ./src/* --verbose --env=node --coverage",
     "test-easy": "jest ./src/* --env=node --noStackTrace",

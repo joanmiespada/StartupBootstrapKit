@@ -3,7 +3,7 @@ export * from './src/model'
 export * from './src/endpoint'
 export * from './src/bootstrap'
 export * from './src/storage_providers/firebase'
-//import * as mongodb from './src/storage_providers/mongodb'
+export * from './src/storage_providers/mongodb'
 
 import * as encrypt from './src/encrypt'
 import * as utils from './src/utils'

@@ -74,6 +74,9 @@ export class userData
     createNewUser(userModel)
     {
         return new Promise( async (resolve,reject)=>{
+
+            console.log(this.storage)
+
             if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
@@ -149,6 +152,8 @@ export class userData
 
     checkIfMailExists(email)
     {
+        console.log(this.storage)
+        
         return new Promise( (resolve,reject) => {
             if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))

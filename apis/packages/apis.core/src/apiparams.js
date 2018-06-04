@@ -7,7 +7,7 @@ const apiParams = {
         user:'root',
         pass:'test123',
         host:'localhost',
-        port:'1234',
+        port:'27017',
         path:'db'
     }
 

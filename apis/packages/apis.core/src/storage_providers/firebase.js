@@ -4,7 +4,7 @@ import {storage } from './definition'
 
 export class firebase extends storage
 {
-  
+
   start()
   {
     if(process.env.FIREBASE_PRIVATE_KEY_CERT_FILE === undefined )//or else env variable is not defined
@@ -33,6 +33,12 @@ export class firebase extends storage
     })
 
     this._db = admin.firestore()
+  }
+
+  close()
+  {
+    //nothing to do, just for compatibility
+    return 0; 
   }
 
   pagedQuery(obj, condition, params)
@@ -79,3 +85,4 @@ export class firebase extends storage
   }
 
 }
+

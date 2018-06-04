@@ -3,11 +3,11 @@ version: '3.3'
 services:
 
   mongodb:
-    image: mongo
+    image: mongo:latest
+    container_name: mongodb
     restart: always
-    environment: 
-      MONGO_INITDB_ROOT_USERNAME: root  #TODO: repace with secrets
-      MONGO_INITDB_ROOT_PASSWORD: test123   
+    ports:
+      - "27017:27017"   
     networks:
       - backend
     volumes:

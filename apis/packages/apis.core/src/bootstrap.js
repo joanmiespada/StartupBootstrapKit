@@ -10,10 +10,11 @@ import compression from 'compression'
 import cluster from 'cluster'
 import os from 'os'
 
-import {logsys as logger } from 'apis-core'
+import {logsys as logger, firebase, mongodb } from 'apis-core'
 import {shutdown} from 'apis-core'
 
 const isProduction = process.env.NODE_ENV === 'production'
+const isTravis = process.env.TRAVIS === true
 
 export const bootstrap = (config) =>
 {
@@ -26,6 +27,8 @@ export const bootstrap = (config) =>
     logger.app.info(message)
     console.log(message) //eslint-disable-line
 
+    let storage = undefined;
+
     if( cluster.isMaster && isProduction ) {
 
         const numCpus = os.cpus().length
@@ -36,10 +39,21 @@ export const bootstrap = (config) =>
         for (let i = 0; i < numCpus; i++) {
             cluster.fork();
         }
+
+        if(isTravis)
+            storage = new firebase();
+        else
+            storage = new mongodb();   
+        
+        storage.start()
+
         cluster.on('exit', (worker) => {
             const aux = `Process ${worker.process.pid} died`
             logger.app.info(aux)
             console.log(aux)//eslint-disable-line
+
+            storage.close()
+
         });
         
         cluster.on('disconnect', (worker) => {
@@ -71,8 +85,9 @@ export const bootstrap = (config) =>
             res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin')
             next()
         })
+       
 
-        const logic = config.logic(express.Router() );
+        const logic = config.logic(express.Router(), storage  );
         app.use(config.version + logic.urlbase, logic.router)
 
         const server = app.listen(config.port, () => { 
@@ -85,6 +100,7 @@ export const bootstrap = (config) =>
             const aux = `Child process with PID: ${process.pid} - Server ${config.description} api has been stopped`
             logger.app.info(aux)
             console.log(aux)//eslint-disable-line
+
         }
 
         process.on ('SIGTERM', shutdown.gracefulShutdown(server,closeServer))

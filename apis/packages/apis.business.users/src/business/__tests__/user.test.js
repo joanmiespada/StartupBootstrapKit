@@ -5,7 +5,7 @@ import uuid from 'uuid/v1'
 import path from 'path'
 import dotenv from 'dotenv'
 
-import {encrypt, firebase } from 'apis-core'
+import {encrypt, firebase, mongodb } from 'apis-core'
 
 import {userLogic} from '../user'
 import {userData} from '../../data/user'
@@ -20,8 +20,15 @@ if(!isTravis)
 
 describe('user testing', ()=>{
 
-    const storage = new firebase();
+    let storage = undefined; 
+
+    if(isTravis)
+        storage = new firebase();
+    else
+        storage = new mongodb();   
+    
     storage.start()
+
     const userlayer = new userLogic( new userData( storage ) )
 
     const userLogged = {
@@ -39,13 +46,13 @@ describe('user testing', ()=>{
     
     const newuser = {email:random.email() , name: random.name() , surname: random.name(), password: password}
     //const newuser = {email:'pepe5@notemail.uk.com' , name: 'josé' , surname: 'popo', password: 'pepe'}
-    let newId=undefined
+    //let newId=undefined
 
-    it('create new user', async()=>{
+    it('create new user', async ()=>{
         try{
-            const result = await userlayer.createNewUser(uToken,newuser)
+            const result = await userlayer.createNewUser(uToken, newuser)
             
-            newId = result.data.id;
+        //  newId = result.data.id;
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
             expect(result.data.id).toBeTruthy()
@@ -54,7 +61,7 @@ describe('user testing', ()=>{
             expect(false).toEqual(true)
         }
     })
-
+/*
     it('create new user with same email', async()=>{
         
         try{
@@ -186,5 +193,6 @@ describe('user testing', ()=>{
             
         }
     })
-
+*/
+    storage.close()
 })
