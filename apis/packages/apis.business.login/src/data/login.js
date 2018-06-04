@@ -1,4 +1,4 @@
-import {firebase as _f, encrypt, utils as _u } from 'apis-core'
+import {firebase as _s, encrypt, utils as _u } from 'apis-core'
 import keys from '../support/keys'
 
 
@@ -6,7 +6,7 @@ export class loginData
 {
     constructor()
     {
-        this.firebase = _f.start()
+        this.storage = _s.start()
         this.isProduction = process.env.NODE_ENV === 'production'
     }
 
@@ -14,12 +14,12 @@ export class loginData
     {
         return new Promise( async (resolve, reject) => {
             
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
             
-            let userRef = this.firebase.db.collection( this.firebase.tables.users )
+            let userRef = this.storage.db.collection( this.storage.tables.users )
 
             const hashemail = await encrypt.obfuscateEmail(email)
             let query = userRef.where('data.login','==', hashemail )

@@ -1,8 +1,8 @@
-import * as admin from 'firebase-admin';
-import fs from 'fs';
+import * as admin from 'firebase-admin'
+import fs from 'fs'
+import {tables} from './definition'
 
 let db = undefined; // = admin.firestore();
-let tables = { users:'users' } //add all collections here! 
 
 export function start()
 {
@@ -29,12 +29,52 @@ export function start()
   admin.initializeApp({
     credential: admin.credential.cert(config),
     databaseURL: 'https://pmp-empowered.firebaseio.com'
-  });
+  })
 
   db = admin.firestore();
   return { db, tables};
 }
 
+export function pagedQuery(obj, condition, params)
+{
+  return obj.orderBy(condition).startAfter(params.pageSize * (params.pageNum-1) ).limit(params.pageSize)
+}
 
+export function createById(collection, id,obj)
+{
+  return collection.doc(id).set(obj)
+}
 
+export function where(collection, field, condition, value)
+{
+  return collection.where(field,condition,value )
+}
+
+export function execute(query)
+{
+  return query.get()
+}
+
+export function findById(collection, id)
+{
+  const elemRef = collection.doc(id)
+  return elemRef.get()
+}
+
+export function fetch(doc)
+{
+  return doc.data()
+}
+
+export function updateById(collection,id, values)
+{
+  const elemRef = collection.doc(id)
+  return elemRef.set(values)
+}
+
+export function deleteById(collection, id)
+{
+  const doc = collection.doc(id)
+  return doc.delete()
+}
 

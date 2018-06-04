@@ -38,13 +38,13 @@ describe('user testing', ()=>{
     
     const newuser = {email:random.email() , name: random.name() , surname: random.name(), password: password}
     //const newuser = {email:'pepe5@notemail.uk.com' , name: 'josé' , surname: 'popo', password: 'pepe'}
-    let newid=undefined
+    let newId=undefined
 
     it('create new user', async()=>{
         try{
             const result = await userlayer.createNewUser(uToken,newuser)
             
-            newid = result.data.id;
+            newId = result.data.id;
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
             expect(result.data.id).toBeTruthy()
@@ -92,10 +92,10 @@ describe('user testing', ()=>{
 
     it('get user by id', async()=>{ 
         try{
-            const result = await userlayer.getUserById(uToken,newid)
+            const result = await userlayer.getUserById(uToken,newId)
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
-            expect(result.data.id).toEqual(newid)
+            expect(result.data.id).toEqual(newId)
         }catch(err){
             console.log(err) //eslint-disable-line
             expect(false).toEqual(true)
@@ -118,7 +118,7 @@ describe('user testing', ()=>{
 
     it('update users by id', async()=>{ 
         try{
-            const result = await userlayer.updateUserById (uToken,newid,{email:random.email() })
+            const result = await userlayer.updateUserById (uToken,newId,{email:random.email() })
         
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
@@ -131,7 +131,7 @@ describe('user testing', ()=>{
 
      it('delete existing user', async()=>{ 
         try{
-            const result = await userlayer.deleteUserById(uToken,newid)
+            const result = await userlayer.deleteUserById(uToken,newId)
         
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)

@@ -1,20 +1,43 @@
-version: '3'
+version: '3.3'
 
-services: 
+services:
+
+  mongodb:
+    image: mongo
+    restart: always
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: root  #TODO: repace with secrets
+      MONGO_INITDB_ROOT_PASSWORD: test123   
+    networks:
+      - backend
+    volumes:
+      - mongo-data:/data/db
   
   userapi:
     build: ./packages/apis.bootstrap.users
     ports:
       - "5081:8081"
+    networks: 
+      - backend
     depends_on: 
       - loginapi
+      - mongodb
+  
   loginapi:
     build: ./packages/apis.bootstrap.login
     ports:
       - "5080:8080"
-    
+    networks: 
+      - backend
+      - frontend
+    depends_on: 
+      - mongodb
+volumes:
+  mongo-data:
+
 networks: 
-  apis: 
+  frontend:
+  backend:
 
 # Start-up
 #docker-compose up -d

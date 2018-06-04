@@ -1,4 +1,4 @@
-import {firebase as _f, encrypt, utils as _u} from 'apis-core'
+import {encrypt, utils as _u} from 'apis-core'
 import userModel from '../models/user'
 import uuid from 'uuid/v1'
 import messages from '../support/messages'
@@ -8,7 +8,7 @@ import errCodes from '../support/errorcodes'
 
 export class userData
 {
-    constructor()
+    constructor(storage)
     {
         this.isProduction = process.env.NODE_ENV === 'production'
         this.userMetaData = {
@@ -16,9 +16,10 @@ export class userData
             name : 'string',
             surname : 'string',
             password:  'string',
-            login: 'string'
+            login: 'string',
+            id: 'uuid'
         };
-        this.firebase = _f.start()
+        this.storage = storage.start()
         
     }
 
@@ -42,17 +43,15 @@ export class userData
     {
         return new Promise( (resolve, reject) => {
 
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
-            const userRef = this.firebase.db.collection( this.firebase.tables.users )
-            const query = userRef.orderBy('data.surname')
-                                .startAfter(params.pageSize * (params.pageNum-1) )
-                                .limit(params.pageSize);
+            const userRef = this.storage.db.collection( this.storage.tables.users )
+            const query = _s.pagedQuery(userRef,'data.surname',params)
             
-            query.get()
+            _s.execute(query) 
                 .then( (snapshot) => {  
 
                     let result = [];
@@ -73,34 +72,33 @@ export class userData
         });
     }
 
-    createNewUser(usermodel)
+    createNewUser(userModel)
     {
         return new Promise( async (resolve,reject)=>{
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
             
-            const userRef = this.firebase.db.collection( this.firebase.tables.users );
+            const userRef = this.storage.db.collection( this.storage.tables.users );
             const id = uuid();
-            const newUserDocRef = userRef.doc(id);
             
             try{
-                const pass_hash = await encrypt.cryptToHash(usermodel.password) 
-                const login_hash = await encrypt.obfuscateEmail(usermodel.email)
+                const pass_hash = await encrypt.cryptToHash(userModel.password) 
+                const login_hash = await encrypt.obfuscateEmail(userModel.email)
                 
                 let obj={
                     meta: this.userMetaData,
                     data:{  
-                        email: this.checkEncriptation(usermodel.email, encrypt.cryptoText), 
-                        name: this.checkEncriptation(usermodel.name, encrypt.cryptoText), 
-                        surname : this.checkEncriptation(usermodel.surname, encrypt.cryptoText), 
+                        email: this.checkEncriptation(userModel.email, encrypt.cryptoText), 
+                        name: this.checkEncriptation(userModel.name, encrypt.cryptoText), 
+                        surname : this.checkEncriptation(userModel.surname, encrypt.cryptoText), 
                         password: pass_hash,
-                        login: login_hash
+                        login: login_hash,
+                        id: id
                     }
                 };
-                
-                newUserDocRef.set(obj)
+                _s.createById(userRef, id, obj)
                     .then(  ()  => resolve(_u.jsonOK({id:id}, {id:'uuid'} ) ) ) 
                     .catch( err => reject (_u.jsonError(err) ) )
                 
@@ -113,52 +111,55 @@ export class userData
         });
     }
 
-    updateUserById(id, usermodel)
+    updateUserById(id, userModel)
     {
         return new Promise( (resolve,reject)=>{
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
-            const userRef = this.firebase.db.collection( this.firebase.tables.users );
-            const newUserDocRef = userRef.doc(id);
-            newUserDocRef.get().then(async (doc) => {
+            const userRef = this.storage.db.collection( this.storage.tables.users );
 
-                if(!doc.exists){ reject( _u.jsonError( keys.errNoUserExistWithId,
-                                                            errCodes, messages))}
+            _s.findById(userRef, id)
+                .then(async (doc) => {
 
-                let userInDb = doc.data();
+                    if(!doc.exists){ reject( _u.jsonError( keys.errNoUserExistWithId,
+                                                                errCodes, messages))}
 
-                if(usermodel.email != undefined && 
-                    usermodel.email !== userInDb.data.email ) {
-                        const res = await this.checkIfMailExists(usermodel.email)
-                        if(res.result && res.data === false) //it doesn't exist
-                            userInDb.data.email = usermodel.email;                   
-                }
-                if(usermodel.name != undefined)
-                    userInDb.data.name = usermodel.name;
-                if(usermodel.surname != undefined)
-                    userInDb.data.surname = usermodel.surname;
+                    let userInDb = doc.data();
 
-                newUserDocRef.set(userInDb);
-                resolve( _u.jsonOK({updated:true},{updated:'bool'}) );
-            }).catch(err=> reject( _u.jsonError(err)));
+                    if(userModel.email != undefined && 
+                        userModel.email !== userInDb.data.email ) {
+                            const res = await this.checkIfMailExists(userModel.email)
+                            if(res.result && res.data === false) //it doesn't exist
+                                userInDb.data.email = userModel.email;                   
+                    }
+                    if(userModel.name != undefined)
+                        userInDb.data.name = userModel.name;
+                    if(userModel.surname != undefined)
+                        userInDb.data.surname = userModel.surname;
+                    
+                    
+                    _s.updateById(userRef,id,userInDb )
+                    
+                    resolve( _u.jsonOK({updated:true},{updated:'bool'}) );
+                }).catch(err=> reject( _u.jsonError(err)));
         });
     }
 
     checkIfMailExists(email)
     {
         return new Promise( (resolve,reject) => {
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
-
-            const userRef = this.firebase.db.collection( this.firebase.tables.users )
-            const query = userRef.where('data.email','==',email )
             
-            query.get().then((snapshot) => { 
+            const userRef = this.storage.db.collection( this.storage.tables.users )
+            const query = _s.where(userRef,'data.email','==',email  )
+            
+            _s.execute(query).then((snapshot) => { 
                     if(snapshot.size === 0)
                         resolve(_u.jsonOK( {exists:false}, {exists:'bool'} ))
                     else
@@ -170,15 +171,14 @@ export class userData
     deleteUserById(id)
     {
         return new Promise( (resolve, reject) => {
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
-            const userRef = this.firebase.db.collection( this.firebase.tables.users )
-            const doc = userRef.doc(id)
-            //console.log(doc)
-            doc.delete()
+            const userRef = this.storage.db.collection( this.storage.tables.users )
+           
+            _s.deleteById(userRef, id)
                 .then(()=> resolve( _u.jsonOK({deleted:true}, {deleted:'bool'}) ) )
                 .catch(err=>reject( _u.jsonError(err)))
         });
@@ -187,39 +187,40 @@ export class userData
     getUserById(id)
     {
         return new Promise( (resolve, reject) => {
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
-            const userRef = this.firebase.db.collection( this.firebase.tables.users ).doc(id)
-            userRef.get().then((doc)=>{
-                const userDataMeta = doc.data()
-                const user = this.mappingFromStorageToUserModel(doc.id,userDataMeta.data )
-                user.password='****'
-                resolve( _u.jsonOK( user, this.userMetaData ) )
-            }).catch(err => reject( _u.jsonError(err) ))
+            const userCollect = this.storage.db.collection( this.storage.tables.users )
+            _s.findById(userCollect, id)
+                .then((doc)=>{
+                    const userDataMeta = doc.data()
+                    const user = this.mappingFromStorageToUserModel(doc.id,userDataMeta.data )
+                    user.password='****'
+                    resolve( _u.jsonOK( user, this.userMetaData ) )
+                }).catch(err => reject( _u.jsonError(err) ))
         });
     }
 
     getUsersByEmail(email)
     {
         return new Promise( (resolve, reject) => {
-            if(this.firebase.db === undefined){
+            if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
-            const userRef = this.firebase.db.collection( this.firebase.tables.users )
-            const query = userRef.where('data.email','==',email )
-
-            query.get().then( (snapshot) => {  
+            const userRef = this.storage.db.collection( this.storage.tables.users )
+            const query = _s.where(userRef,'data.email','==',email  )
+            
+            _s.execute(query).then( (snapshot) => {  
 
                 let users = []
                 if(!snapshot.empty) 
                 {
                     snapshot.forEach((doc) => {
-                        const userDataMeta = doc.data()           
+                        const userDataMeta = _s.fetch(doc)             
                         const user = this.mappingFromStorageToUserModel(doc.id, userDataMeta.data)
                         user.password='****'
                         users.push(user)
