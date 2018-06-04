@@ -19,8 +19,7 @@ export class userData
             login: 'string',
             id: 'uuid'
         };
-        this.storage = storage.start()
-        
+        this.storage = storage
     }
 
     mappingFromStorageToUserModel(id,user)
@@ -49,9 +48,9 @@ export class userData
             }
 
             const userRef = this.storage.db.collection( this.storage.tables.users )
-            const query = _s.pagedQuery(userRef,'data.surname',params)
+            const query = this.storage.pagedQuery(userRef,'data.surname',params)
             
-            _s.execute(query) 
+            this.storage.execute(query) 
                 .then( (snapshot) => {  
 
                     let result = [];
@@ -98,7 +97,7 @@ export class userData
                         id: id
                     }
                 };
-                _s.createById(userRef, id, obj)
+                this.storage.createById(userRef, id, obj)
                     .then(  ()  => resolve(_u.jsonOK({id:id}, {id:'uuid'} ) ) ) 
                     .catch( err => reject (_u.jsonError(err) ) )
                 
@@ -121,7 +120,7 @@ export class userData
 
             const userRef = this.storage.db.collection( this.storage.tables.users );
 
-            _s.findById(userRef, id)
+            this.storage.findById(userRef, id)
                 .then(async (doc) => {
 
                     if(!doc.exists){ reject( _u.jsonError( keys.errNoUserExistWithId,
@@ -141,7 +140,7 @@ export class userData
                         userInDb.data.surname = userModel.surname;
                     
                     
-                    _s.updateById(userRef,id,userInDb )
+                    this.storage.updateById(userRef,id,userInDb )
                     
                     resolve( _u.jsonOK({updated:true},{updated:'bool'}) );
                 }).catch(err=> reject( _u.jsonError(err)));
@@ -157,9 +156,9 @@ export class userData
             }
             
             const userRef = this.storage.db.collection( this.storage.tables.users )
-            const query = _s.where(userRef,'data.email','==',email  )
+            const query = this.storage.where(userRef,'data.email','==',email  )
             
-            _s.execute(query).then((snapshot) => { 
+            this.storage.execute(query).then((snapshot) => { 
                     if(snapshot.size === 0)
                         resolve(_u.jsonOK( {exists:false}, {exists:'bool'} ))
                     else
@@ -178,7 +177,7 @@ export class userData
 
             const userRef = this.storage.db.collection( this.storage.tables.users )
            
-            _s.deleteById(userRef, id)
+            this.storage.deleteById(userRef, id)
                 .then(()=> resolve( _u.jsonOK({deleted:true}, {deleted:'bool'}) ) )
                 .catch(err=>reject( _u.jsonError(err)))
         });
@@ -193,7 +192,7 @@ export class userData
             }
 
             const userCollect = this.storage.db.collection( this.storage.tables.users )
-            _s.findById(userCollect, id)
+            this.storage.findById(userCollect, id)
                 .then((doc)=>{
                     const userDataMeta = doc.data()
                     const user = this.mappingFromStorageToUserModel(doc.id,userDataMeta.data )
@@ -212,15 +211,15 @@ export class userData
             }
 
             const userRef = this.storage.db.collection( this.storage.tables.users )
-            const query = _s.where(userRef,'data.email','==',email  )
+            const query = this.storage.where(userRef,'data.email','==',email  )
             
-            _s.execute(query).then( (snapshot) => {  
+            this.storage.execute(query).then( (snapshot) => {  
 
                 let users = []
                 if(!snapshot.empty) 
                 {
                     snapshot.forEach((doc) => {
-                        const userDataMeta = _s.fetch(doc)             
+                        const userDataMeta = this.storage.fetch(doc)             
                         const user = this.mappingFromStorageToUserModel(doc.id, userDataMeta.data)
                         user.password='****'
                         users.push(user)

@@ -5,7 +5,7 @@ import uuid from 'uuid/v1'
 import path from 'path'
 import dotenv from 'dotenv'
 
-import {encrypt} from 'apis-core'
+import {encrypt, firebase } from 'apis-core'
 
 import {userLogic} from '../user'
 import {userData} from '../../data/user'
@@ -20,8 +20,9 @@ if(!isTravis)
 
 describe('user testing', ()=>{
 
-
-    const userlayer = new userLogic( new userData() )
+    const storage = new firebase();
+    storage.start()
+    const userlayer = new userLogic( new userData( storage ) )
 
     const userLogged = {
         id: uuid(),
