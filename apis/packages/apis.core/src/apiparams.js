@@ -8,7 +8,7 @@ const apiParams = {
         pass:'test123',
         host:'localhost',
         port:'27017',
-        path:'db'
+        database:'db'
     }
 
 

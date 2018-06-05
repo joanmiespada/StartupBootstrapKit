@@ -56,7 +56,7 @@ export class firebase extends storage
     return collection.where(field,condition,value )
   }
 
-  execute(query)
+  execute(collection,query)
   {
     return query.get()
   }

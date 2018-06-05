@@ -10,6 +10,8 @@ import {encrypt, firebase, mongodb } from 'apis-core'
 import {userLogic} from '../user'
 import {userData} from '../../data/user'
 
+import mongo from 'mongodb'
+
 const isTravis = process.env.TRAVIS === true
 
 if(!isTravis)
@@ -20,39 +22,62 @@ if(!isTravis)
 
 describe('user testing', ()=>{
 
-    let storage = undefined; 
+    let storage = undefined;
+    let userlayer, uToken, newuser
 
-    if(isTravis)
-        storage = new firebase();
-    else
-        storage = new mongodb();   
-    
-    storage.start()
+    beforeAll( async ()=> 
+    {
+         
+        let client=undefined, database=undefined
+        if(isTravis)
+        {
+            storage = new firebase();
+            storage.start()
+        }
+        else{
+            storage = new mongodb();
 
-    const userlayer = new userLogic( new userData( storage ) )
+            client = await mongo.MongoClient.connect('mongodb://localhost:27017'); 
+            database = await client.db('db');
 
-    const userLogged = {
-        id: uuid(),
-        profiles:['admin', 'user'] //add roles here 
-    }    
-    const uToken = encrypt.createJWTtoken(userLogged)
+            storage.start( {client, database})
+        }
+        
+        userlayer = new userLogic( new userData( storage ) )
 
-    const random = new chance()
-    //let password = generator.generate({
-    //    length: 10,
-    //    numbers: true
-    //});
-    const password='pepe'
-    
-    const newuser = {email:random.email() , name: random.name() , surname: random.name(), password: password}
-    //const newuser = {email:'pepe5@notemail.uk.com' , name: 'josé' , surname: 'popo', password: 'pepe'}
-    //let newId=undefined
+        const userLogged = {
+            id: uuid(),
+            profiles:['admin', 'user'] //add roles here 
+        }    
+        uToken = encrypt.createJWTtoken(userLogged)
 
+       
+    })
+
+    afterAll( ()=>
+    {
+        storage.close()
+    })
+
+    let newId = undefined
     it('create new user', async ()=>{
         try{
+
+
+            const random = new chance()
+            //let password = generator.generate({
+            //    length: 10,
+            //    numbers: true
+            //});
+            const password = 'pepe'
+
+            newuser = {email:random.email() , name: random.name() , surname: random.name(), password: password}
+            //const newuser = {email:'pepe5@notemail.uk.com' , name: 'josé' , surname: 'popo', password: 'pepe'}
+            
+
             const result = await userlayer.createNewUser(uToken, newuser)
             
-        //  newId = result.data.id;
+            newId = result.data.id;
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
             expect(result.data.id).toBeTruthy()
@@ -86,6 +111,7 @@ describe('user testing', ()=>{
 
     })
     
+  
     it('check if email exist', async()=>{ 
         try{
             const result = await userlayer.checkIfMailExists(uToken, newuser.email)
@@ -97,7 +123,7 @@ describe('user testing', ()=>{
             expect(false).toEqual(true)
         }
     })
-
+*/
     it('get user by id', async()=>{ 
         try{
             const result = await userlayer.getUserById(uToken,newId)
@@ -109,7 +135,7 @@ describe('user testing', ()=>{
             expect(false).toEqual(true)
         }
     })
-
+/*
     it('get users by email', async()=>{ 
         try{
             const result = await userlayer.getUsersByEmail(uToken,newuser.email)
@@ -194,5 +220,5 @@ describe('user testing', ()=>{
         }
     })
 */
-    storage.close()
+    
 })

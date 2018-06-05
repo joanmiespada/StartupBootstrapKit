@@ -50,7 +50,7 @@ export class userData
             const userRef = this.storage.db.collection( this.storage.tables.users )
             const query = this.storage.pagedQuery(userRef,'data.surname',params)
             
-            this.storage.execute(query) 
+            this.storage.execute(userRef,query) 
                 .then( (snapshot) => {  
 
                     let result = [];
@@ -75,8 +75,6 @@ export class userData
     {
         return new Promise( async (resolve,reject)=>{
 
-            console.log(this.storage)
-
             if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
                 return
@@ -100,6 +98,7 @@ export class userData
                         id: id
                     }
                 };
+                
                 this.storage.createById(userRef, id, obj)
                     .then(  ()  => resolve(_u.jsonOK({id:id}, {id:'uuid'} ) ) ) 
                     .catch( err => reject (_u.jsonError(err) ) )
@@ -152,8 +151,6 @@ export class userData
 
     checkIfMailExists(email)
     {
-        console.log(this.storage)
-        
         return new Promise( (resolve,reject) => {
             if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))
@@ -163,12 +160,15 @@ export class userData
             const userRef = this.storage.db.collection( this.storage.tables.users )
             const query = this.storage.where(userRef,'data.email','==',email  )
             
-            this.storage.execute(query).then((snapshot) => { 
+            this.storage.execute(userRef,query).then((snapshot) => { 
                     if(snapshot.size === 0)
                         resolve(_u.jsonOK( {exists:false}, {exists:'bool'} ))
-                    else
+                    else{
                         resolve(_u.jsonOK( {exists:true}, {exists:'bool'}))
-            }).catch(err => reject(_u.jsonError(err)))
+                    }
+            }).catch(err =>{
+                 reject(_u.jsonError(err))
+            })
         });
     }
 
@@ -218,7 +218,7 @@ export class userData
             const userRef = this.storage.db.collection( this.storage.tables.users )
             const query = this.storage.where(userRef,'data.email','==',email  )
             
-            this.storage.execute(query).then( (snapshot) => {  
+            this.storage.execute(userRef,query).then( (snapshot) => {  
 
                 let users = []
                 if(!snapshot.empty) 
