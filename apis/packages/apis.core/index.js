@@ -1,4 +1,5 @@
 export * from './src/business'
+export * from './src/data'
 export * from './src/model'
 export * from './src/endpoint'
 export * from './src/bootstrap'

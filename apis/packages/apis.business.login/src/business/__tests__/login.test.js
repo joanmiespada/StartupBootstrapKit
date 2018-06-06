@@ -1,6 +1,9 @@
 import expect from 'expect'
 import path from 'path'
 import dotenv from 'dotenv'
+import mongo from 'mongodb'
+
+import {firebase, mongodb } from 'apis-core'
 
 import {loginLogic} from '../login'
 import {loginData} from '../../data/login'
@@ -15,8 +18,42 @@ if(!isTravis)
 
 describe('login testing', ()=>{
 
-    const loginLayer = new loginLogic( new loginData() )
-    const user = {email:'pepe1@notemail.uk.com' , name: 'josé' , surname: 'popo', password: 'pepe'}
+    
+
+    let storage = undefined;
+    let loginLayer
+
+    beforeAll( async ()=> 
+    {
+         
+        let client=undefined, database=undefined
+        if(isTravis)
+        {
+            storage = new firebase();
+            storage.start()
+        }
+        else{
+            storage = new mongodb();
+
+            client = await mongo.MongoClient.connect('mongodb://localhost:27017'); 
+            database = await client.db('db');
+
+            storage.start( {client, database})
+        }
+        
+        loginLayer = new loginLogic( new loginData( storage ) )
+
+              
+    })
+
+    afterAll( ()=>
+    {
+        storage.close()
+    })
+
+
+
+    const user = {email:'fol@he.ni' , password: 'pepe'}
     
     it('login ok', async()=>{ 
         const result = await loginLayer.login(user.email, user.password)

@@ -1,13 +1,11 @@
-import {firebase as _s, encrypt, utils as _u } from 'apis-core'
+import {encrypt, utils as _u, data } from 'apis-core'
 import keys from '../support/keys'
 
-
-export class loginData
+export class loginData extends data
 {
-    constructor()
+    constructor(storage)
     {
-        this.storage = _s.start()
-        this.isProduction = process.env.NODE_ENV === 'production'
+        super(storage)
     }
 
     login(email,passwordPlain)
@@ -21,27 +19,26 @@ export class loginData
             
             let userRef = this.storage.db.collection( this.storage.tables.users )
 
-            const hashemail = await encrypt.obfuscateEmail(email)
-            let query = userRef.where('data.login','==', hashemail )
+             
+            const query = this.storage.where(userRef,'data.email','==', email )
+            
 
-            query.get().then( (snapshot) => {  
+            this.storage.executeAndFetch(userRef,query).then( (snapshot) => {  
 
-                let result, id
-                if(snapshot.empty || snapshot.size >1) 
+                
+                if(snapshot.isEmpty()) 
                     {  
                         resolve( {login:false} ) 
                         return
                     }
+ 
+                const result = snapshot.first();
+               
 
-                snapshot.forEach((doc) => {           
-                    result =  doc.data()
-                    id = doc.id
-                });
-                
-                encrypt.compareToHash(passwordPlain,result.data.password)
+                encrypt.compareToHash(passwordPlain, result.data.password)
                         .then( (canIlogin) => {
                             if(canIlogin)
-                                resolve( {login:true, user: result.data, id:id} )
+                                resolve( {login:true, user: result.data, id:result.data.id} )
                             else
                                 resolve( {login:false} )
                         })

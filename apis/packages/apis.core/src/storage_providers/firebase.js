@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin'
 import fs from 'fs'
 import {storage } from './definition'
+import Immutable from 'immutable'
 
 export class firebase extends storage
 {
@@ -46,6 +47,15 @@ export class firebase extends storage
     return obj.orderBy(condition).startAfter(params.pageSize * (params.pageNum-1) ).limit(params.pageSize)
   }
 
+  executePagedQueryAndFetch(collection, condition, params)
+  {
+      return new Promise(async (resolve) => {
+          const totalItems = undefined
+          const query =  this.pagedQuery(collection,condition, params )
+          this.executeAndFetch(collection,query).then( pageItems => resolve( {pageItems,totalItems } ) )
+      })
+  }
+
   createById(collection, id,obj)
   {
     return collection.doc(id).set(obj)
@@ -60,6 +70,28 @@ export class firebase extends storage
   {
     return query.get()
   }
+  executeAndFetch(collection, query)
+  {
+
+    return new Promise( (resolve, reject) => {
+        query.get().then( (snapshot) => {
+
+          let total=[], aux = undefined
+          if(!snapshot.empty )
+          {
+              snapshot.forEach((doc) => {
+
+                aux = doc.data()
+                
+                total.push(aux)
+              })
+              const result = Immutable.Set(total)
+              resolve(result)
+          }else
+            resolve(new Immutable.Set())
+        }).catch( err=> reject(err))
+      })
+  }
 
   findById(collection, id)
   {
@@ -69,7 +101,9 @@ export class firebase extends storage
 
   fetch(doc)
   {
-    return doc.data()
+    const result = [];
+    result.push(doc.data())
+    return result
   }
 
   updateById(collection,id, values)

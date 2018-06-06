@@ -1,42 +1,41 @@
-import {encrypt, utils as _u} from 'apis-core'
+import {encrypt, utils as _u, data} from 'apis-core'
 import userModel from '../models/user'
 import uuid from 'uuid/v1'
 import messages from '../support/messages'
 import keys from '../support/keys'
 import errCodes from '../support/errorcodes'
 
+const isProduction = process.env.NODE_ENV === 'production'
 
-export class userData
+const checkEncriptation = (text, func) => isProduction ? func(text): text
+
+export class userData extends data
 {
     constructor(storage)
     {
-        this.isProduction = process.env.NODE_ENV === 'production'
+        super(storage)
         this.userMetaData = {
             email : 'string',
             name : 'string',
             surname : 'string',
             password:  'string',
-            login: 'string',
             id: 'uuid'
         };
-        this.storage = storage
+    
     }
 
-    mappingFromStorageToUserModel(id,user)
+    mappingFromStorageToUserModel(user)
     {
         const use = new userModel()   
-        use.Id = id
+        use.Id = user.id
         use.Email = user.email
         use.Name = user.name
         use.Surname = user.surname
-        use.Password = user.password
+        use.Password ='****'// user.password
         return use
     }
 
-    checkEncriptation(text, func)
-    {
-        return this.isProduction ? func(text): text
-    }
+    
 
     getAllUsers(params)
     {
@@ -48,24 +47,19 @@ export class userData
             }
 
             const userRef = this.storage.db.collection( this.storage.tables.users )
-            const query = this.storage.pagedQuery(userRef,'data.surname',params)
+            //const query = this.storage.pagedQuery(userRef,'data.surname',params)
             
-            this.storage.execute(userRef,query) 
+            this.storage.executePagedQueryAndFetch(userRef,'data.surname',params) 
                 .then( (snapshot) => {  
-
-                    let result = [];
-                    if(snapshot.empty) return result
-
-                    snapshot.forEach((doc) => {           
-                        const userInfo = doc.data()
-                        const user = this.mappingFromStorageToUserModel(doc.id, userInfo.data )
-                        user.password='****'
-                        user.email = this.checkEncriptation(user.email, encrypt.decryptoText), 
-                        user.name = this.checkEncriptation(user.name, encrypt.decryptoText), 
-                        user.surname = this.checkEncriptation(user.surname, encrypt.decryptoText), 
-                        result.push(user)
-                    });
-                    resolve( _u.jsonOK(result))
+                    const finalList = snapshot.pageItems.map( (x)=>{
+                        const item =  this.mappingFromStorageToUserModel(x.data) 
+                        item.email = checkEncriptation(item.email, encrypt.decryptoText), 
+                        item.name = checkEncriptation(item.name, encrypt.decryptoText), 
+                        item.surname = checkEncriptation(item.surname, encrypt.decryptoText) 
+                        return item
+                        })
+                    
+                    resolve( _u.jsonOK({users:finalList.toArray(), totalUsers:snapshot.totalItems}))
                 })
                 .catch( (err) => { reject(_u.jsonError(err) ) } )
         });
@@ -85,16 +79,14 @@ export class userData
             
             try{
                 const pass_hash = await encrypt.cryptToHash(userModel.password) 
-                const login_hash = await encrypt.obfuscateEmail(userModel.email)
-                
+            
                 let obj={
                     meta: this.userMetaData,
                     data:{  
-                        email: this.checkEncriptation(userModel.email, encrypt.cryptoText), 
-                        name: this.checkEncriptation(userModel.name, encrypt.cryptoText), 
-                        surname : this.checkEncriptation(userModel.surname, encrypt.cryptoText), 
+                        email: checkEncriptation(userModel.email, encrypt.cryptoText), 
+                        name: checkEncriptation(userModel.name, encrypt.cryptoText), 
+                        surname : checkEncriptation(userModel.surname, encrypt.cryptoText), 
                         password: pass_hash,
-                        login: login_hash,
                         id: id
                     }
                 };
@@ -125,25 +117,31 @@ export class userData
             this.storage.findById(userRef, id)
                 .then(async (doc) => {
 
-                    if(!doc.exists){ reject( _u.jsonError( keys.errNoUserExistWithId,
-                                                                errCodes, messages))}
+                    const userInDbList = await this.storage.fetch(doc) 
 
-                    let userInDb = doc.data();
+                    if(userInDbList.length!==1){ reject( _u.jsonError( keys.errNoUserExistWithId,errCodes, messages))}
 
+                    const userInDb = userInDbList[0];
+                    
                     if(userModel.email != undefined && 
                         userModel.email !== userInDb.data.email ) {
+
                             const res = await this.checkIfMailExists(userModel.email)
-                            if(res.result && res.data === false) //it doesn't exist
-                                userInDb.data.email = userModel.email;                   
+                            if(res.result && res.data.exists === false) //it doesn't exist
+                                userInDb.data.email = userModel.email; 
+                            else{
+                                reject( _u.jsonError( keys.errEmailAlreadyExists,
+                                                                errCodes, messages ) )                 
+                                return
+                                }
                     }
                     if(userModel.name != undefined)
                         userInDb.data.name = userModel.name;
                     if(userModel.surname != undefined)
                         userInDb.data.surname = userModel.surname;
                     
-                    
                     this.storage.updateById(userRef,id,userInDb )
-                    
+
                     resolve( _u.jsonOK({updated:true},{updated:'bool'}) );
                 }).catch(err=> reject( _u.jsonError(err)));
         });
@@ -160,7 +158,7 @@ export class userData
             const userRef = this.storage.db.collection( this.storage.tables.users )
             const query = this.storage.where(userRef,'data.email','==',email  )
             
-            this.storage.execute(userRef,query).then((snapshot) => { 
+            this.storage.executeAndFetch(userRef,query).then((snapshot) => {
                     if(snapshot.size === 0)
                         resolve(_u.jsonOK( {exists:false}, {exists:'bool'} ))
                     else{
@@ -198,10 +196,10 @@ export class userData
 
             const userCollect = this.storage.db.collection( this.storage.tables.users )
             this.storage.findById(userCollect, id)
-                .then((doc)=>{
-                    const userDataMeta = doc.data()
-                    const user = this.mappingFromStorageToUserModel(doc.id,userDataMeta.data )
-                    user.password='****'
+                .then(async (doc)=>{
+                    const userList = await this.storage.fetch(doc)
+                    const userDataMeta = userList[0]
+                    const user = this.mappingFromStorageToUserModel(userDataMeta.data )
                     resolve( _u.jsonOK( user, this.userMetaData ) )
                 }).catch(err => reject( _u.jsonError(err) ))
         });
@@ -218,20 +216,11 @@ export class userData
             const userRef = this.storage.db.collection( this.storage.tables.users )
             const query = this.storage.where(userRef,'data.email','==',email  )
             
-            this.storage.execute(userRef,query).then( (snapshot) => {  
+            this.storage.executeAndFetch(userRef,query).then( (users) => {  
 
-                let users = []
-                if(!snapshot.empty) 
-                {
-                    snapshot.forEach((doc) => {
-                        const userDataMeta = this.storage.fetch(doc)             
-                        const user = this.mappingFromStorageToUserModel(doc.id, userDataMeta.data)
-                        user.password='****'
-                        users.push(user)
-                    });
-                }
+                const finalList = users.map( x=>this.mappingFromStorageToUserModel(x.data))
                 
-                resolve( _u.jsonOK( users ,  { data:'array',userType: this.userMetaData} ) )
+                resolve( _u.jsonOK( finalList.toArray() ,  { data:'array',userType: this.userMetaData} ) )
             }).catch( (err) => reject( _u.jsonError(err) ) )
             
         });

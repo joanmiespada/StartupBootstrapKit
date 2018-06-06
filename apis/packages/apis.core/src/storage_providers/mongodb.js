@@ -27,10 +27,8 @@ const translateOperators = (value) =>{
         case '>=': result ='$gte'; break
         case '<': result ='$lt'; break
         case '<=': result ='$lte'; break
-
+        default:  throw Error('operator not yet implemented in mongodb')
     }
-    if(result === undefined)
-        throw Error('operator not yet implemented in mongodb')
     return result
 }
 
@@ -81,9 +79,21 @@ export class mongodb extends storage
     }
 
 
-    pagedQuery(obj, condition, params)
+    pagedQuery(collection, condition, params)
     {
-        return obj.orderBy(condition).startAfter(params.pageSize * (params.pageNum-1) ).limit(params.pageSize)
+        return collection.find().skip(params.pageSize*(params.pageNum-1)).limit(params.pageSize).sort(  JSON.parse(`{ "${condition}": 1 }`) )
+    }
+
+    executePagedQueryAndFetch(collection, condition, params)
+    {
+        return new Promise(async (resolve) => {
+            const totalItems = await collection.find().count()
+            const cursor =  this.pagedQuery(collection,condition, params )
+            cursor.toArray( (err,data)=>{
+                const pageItems = Immutable.Set(data)
+                resolve( {pageItems,totalItems })
+            }) 
+        })
     }
 
     createById(collection, id,obj)
@@ -111,44 +121,44 @@ export class mongodb extends storage
     execute(collection,query)
     {
         return new Promise( (resolve) => {
-            collection.find(query).toArray( (err,data)=>{
-                const sdata = Immutable.Set(data)
-                resolve(sdata)
-            }) 
-            
+            const cursor = collection.find(query)
+            resolve(cursor)  
         })
-        
-        
+    }
+
+    executeAndFetch(collection,query)
+    {
+        return new Promise( (resolve) => {
+            const cursor = collection.find(query)
+            cursor.toArray( (err,data)=>{
+                const setData = Immutable.Set(data)
+                resolve(setData)
+            }) 
+        })
     }
 
     findById(collection, id)
     {
-        //const elemRef = collection.find({_id: id })
-        //return elemRef.get()
-
         return new Promise( (resolve) => {
             const cursor = collection.find({_id: id })
             resolve(cursor)
         })
     }
 
-    //Estoy aqui!!!!!!!
-    fetch(cursor)
+    async fetch(cursor)
     {
-        return doc.data()
-
+        return await cursor.toArray()
     }
 
     updateById(collection,id, values)
     {
-        const elemRef = collection.doc(id)
-        return elemRef.set(values)
+        collection.updateOne({_id:id},{ $set: values } )
     }
 
     deleteById(collection, id)
     {
-        const doc = collection.doc(id)
-        return doc.delete()
+        return collection.deleteOne({_id:id})
+        
     }
 
 }

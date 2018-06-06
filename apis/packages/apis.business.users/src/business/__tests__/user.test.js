@@ -58,13 +58,11 @@ describe('user testing', ()=>{
     {
         storage.close()
     })
-
+    const random = new chance()
     let newId = undefined
+    
     it('create new user', async ()=>{
         try{
-
-
-            const random = new chance()
             //let password = generator.generate({
             //    length: 10,
             //    numbers: true
@@ -86,7 +84,9 @@ describe('user testing', ()=>{
             expect(false).toEqual(true)
         }
     })
-/*
+    
+    
+
     it('create new user with same email', async()=>{
         
         try{
@@ -123,7 +123,7 @@ describe('user testing', ()=>{
             expect(false).toEqual(true)
         }
     })
-*/
+
     it('get user by id', async()=>{ 
         try{
             const result = await userlayer.getUserById(uToken,newId)
@@ -135,7 +135,7 @@ describe('user testing', ()=>{
             expect(false).toEqual(true)
         }
     })
-/*
+
     it('get users by email', async()=>{ 
         try{
             const result = await userlayer.getUsersByEmail(uToken,newuser.email)
@@ -181,8 +181,7 @@ describe('user testing', ()=>{
     it('delete non existing user', async()=>{ 
         try{
             await userlayer.deleteUserById(uToken,'sdfsdfsdfsdf')
-            //console.log('ERROR') //eslint-disable-line
-            //expect(false).toEqual(true)
+         
         }catch(result){
             expect(result).toBeDefined()
             expect(result.result).toEqual(false)
@@ -198,7 +197,8 @@ describe('user testing', ()=>{
             
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
-            expect(result.data).toBeDefined()
+            expect(result.data.users).toBeDefined()
+            
 
         }catch(err){
             console.log(err) //eslint-disable-line
@@ -219,6 +219,6 @@ describe('user testing', ()=>{
             
         }
     })
-*/
+
     
 })
