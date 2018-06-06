@@ -162,3 +162,8 @@ export class mongodb extends storage
     }
 
 }
+
+/*
+
+>mongo-express -U mongodb://localhost:27017/db
+ */

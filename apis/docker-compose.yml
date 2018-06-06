@@ -29,9 +29,22 @@ services:
       - "5080:8080"
     networks: 
       - backend
-      - frontend
     depends_on: 
       - mongodb
+  
+  nginxw:
+    build: ./conf/nginx
+    restart: always
+    ports:
+      - "9090:80"
+    depends_on: 
+      - mongodb
+      - loginapi
+      - userapi
+    networks: 
+      - frontend
+      - backend
+
 volumes:
   mongo-data:
 
@@ -48,3 +61,5 @@ networks:
 #docker rm $(docker ps -a -q)
 # Delete all images
 #docker rmi $(docker images -q)
+
+#docker exec -i -t b2346ce35464 /bin/bash

@@ -18,8 +18,6 @@ if(!isTravis)
 
 describe('login testing', ()=>{
 
-    
-
     let storage = undefined;
     let loginLayer
 
@@ -43,15 +41,12 @@ describe('login testing', ()=>{
         
         loginLayer = new loginLogic( new loginData( storage ) )
 
-              
     })
 
     afterAll( ()=>
     {
         storage.close()
     })
-
-
 
     const user = {email:'fol@he.ni' , password: 'pepe'}
     
