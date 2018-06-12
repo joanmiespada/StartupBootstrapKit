@@ -29,6 +29,7 @@
     "mongodb-memory-server": "^1.8.0"
   },
   "scripts": {
+    "pretest": "eslint -c ../../.eslintrc ./src",
     "build-raw": "babel src -d dist",
     "test": "jest ./src/* --verbose --env=node --coverage  --runInBand",
     "test-easy": "jest ./src/* --env=node --noStackTrace",

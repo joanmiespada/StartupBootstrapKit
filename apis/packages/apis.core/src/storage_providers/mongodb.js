@@ -68,14 +68,16 @@ export class mongodb extends storage
     
     }
 
-    async close()
+    close()
     {
         if(this._client !== undefined )
         {
-            //await this._db.close()
-            await this._client.close()
-            this.message('connection with mongodb closed')
+        
+            this._client.close().then(()=>
+                this.message('connection with mongodb closed')
+            )
         }
+    
     }
 
 
