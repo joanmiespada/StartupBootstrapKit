@@ -9,7 +9,8 @@ export class storage
       this._db = undefined
 
       this._tables = { 
-                        users:'users' 
+                        users:'users',
+                        todoLists:'todolists' 
                     } //add all collections here! 
     }
 
