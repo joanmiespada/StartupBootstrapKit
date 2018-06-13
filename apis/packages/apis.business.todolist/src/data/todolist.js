@@ -11,17 +11,13 @@ export class todoListData extends data
     constructor(storage)
     {
         super(storage)
-        this.todoListMetaData = {
-            todolist: 'array',
-            todo:{
-                title : 'string',
-                description : 'string',
-                owner : 'uuid',
-                //changes:  'array of todo',
-                id: 'uuid'
-            }
-        };
-    
+        this.todoListsMetaData = {
+            todos: 'array of todo',
+            title : 'string',
+            description : 'string',
+            owner : 'uuid',
+            id: 'uuid'
+        }
     }
 
     mappingFromStorageToTodoListModel(ttdList)
@@ -31,13 +27,13 @@ export class todoListData extends data
         todoList.Title = ttdList.title
         todoList.Description = ttdList.description
         todoList.Owner = ttdList.owner
-        //todoList.todoList = ...ttdList.changes
+        //todoList.todos = ...ttdList.changes
         return todoList
     }
 
     
 
-    getAllTodoLists(params)
+    getAllTodoLists(params,filter)
     {
         return new Promise( (resolve, reject) => {
 
@@ -48,8 +44,9 @@ export class todoListData extends data
 
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
             //const query = this.storage.pagedQuery(todoListRef,'data.surname',params)
+            const filterObj = { field:'id', operator:'==', value: filter }
             
-            this.storage.executePagedQueryAndFetch(todoListRef,'data.owner',params) 
+            this.storage.executePagedQueryAndFetch(todoListRef,'data.owner', params, filterObj) 
                 .then( (snapshot) => {  
                     const finalList = snapshot.pageItems.map( (x)=>{
                         const item =  this.mappingFromStorageToTodoListModel(x.data) 
@@ -71,22 +68,21 @@ export class todoListData extends data
                 return
             }
             
-            const todoListRef = this.storage.db.collection( this.storage.tables.todoList );
+            const todoListRef = this.storage.db.collection( this.storage.tables.todoLists );
             const id = uuid();
+            todoListModel.Id = id
             
             try{
                 
-            
                 let obj={
-                    meta: this.todoListMetaData,
-                    data:todoListModel
+                    meta: this.todoListsMetaData,
+                    data: todoListModel
                 };
                 
                 this.storage.createById(todoListRef, id, obj)
                     .then(  ()  => resolve(_u.jsonOK({id:id}, {id:'uuid'} ) ) ) 
                     .catch( err => reject (_u.jsonError(err) ) )
                 
-            
             }catch(err)
             {
                 reject(_u.jsonError(err))
@@ -103,7 +99,7 @@ export class todoListData extends data
                 return
             }
 
-            const todoListRef = this.storage.db.collection( this.storage.tables.todoList );
+            const todoListRef = this.storage.db.collection( this.storage.tables.todoLists );
 
             this.storage.findById(todoListRef, id)
                 .then(async (doc) => {
@@ -130,7 +126,7 @@ export class todoListData extends data
         });
     }
 
-    checkIfTodoListExists(title)
+    checkIfTodoListExists(title,userid)
     {
         return new Promise( (resolve,reject) => {
             if(this.storage.db === undefined){
@@ -138,8 +134,17 @@ export class todoListData extends data
                 return
             }
             
-            const todoListRef = this.storage.db.collection( this.storage.tables.todoList )
-            const query = this.storage.where(todoListRef,'data.title','==',title  )
+            const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
+            
+            const conditions =  [ {field:'data.title',
+                                  operator: '==',
+                                  value: title },
+                                  'and',
+                                  {field:'data.owner',
+                                  operator: '==',
+                                  value: userid }, 
+                                ]
+            const query = this.storage.whereList(todoListRef, conditions )
             
             this.storage.executeAndFetch(todoListRef,query).then((snapshot) => {
                     if(snapshot.size === 0)
@@ -161,7 +166,7 @@ export class todoListData extends data
                 return
             }
 
-            const todoListRef = this.storage.db.collection( this.storage.tables.todoList )
+            const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
            
             this.storage.deleteById(todoListRef, id)
                 .then(()=> resolve( _u.jsonOK({deleted:true}, {deleted:'bool'}) ) )
@@ -177,13 +182,13 @@ export class todoListData extends data
                 return
             }
 
-            const todoListRef = this.storage.db.collection( this.storage.tables.todoList )
+            const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
             this.storage.findById(todoListRef, id)
                 .then(async (doc)=>{
                     const todoLstList = await this.storage.fetch(doc)
                     const todoListDataMeta = todoLstList[0]
                     const todoList = this.mappingFromStorageToTodoListModel(todoListDataMeta.data )
-                    resolve( _u.jsonOK( todoList, this.todoListMetaData ) )
+                    resolve( _u.jsonOK( todoList, this.todoListsMetaData ) )
                     }).catch(err => reject( _u.jsonError(err) ))
             })
     }
@@ -196,14 +201,14 @@ export class todoListData extends data
                 return
             }
 
-            const todoListRef = this.storage.db.collection( this.storage.tables.todoList )
+            const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
             const query = this.storage.where(todoListRef,'data.title','==',title  )
             
             this.storage.executeAndFetch(todoListRef,query).then( (users) => {  
 
                 const finalList = users.map( x=>this.mappingFromStorageToTodoListModel(x.data))
                 
-                resolve( _u.jsonOK( finalList.toArray() ,  { data:'array',userType: this.todoListMetaData} ) )
+                resolve( _u.jsonOK( finalList.toArray() ,  { data:'array',userType: this.todoListsMetaData} ) )
             }).catch( (err) => reject( _u.jsonError(err) ) )
             
         });

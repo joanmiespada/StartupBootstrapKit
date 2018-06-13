@@ -53,10 +53,10 @@ export class userLogic extends business
             if(userTokenRequired && !validation.result) { reject(validation); return }
             
             if(params.email === undefined) 
-                { reject( _u.jsonError(keys.errEmailIsMandatory,errCodes,messages ) ) }
+                { reject( _u.jsonError(keys.errEmailIsMandatory,errCodes,messages ) ); return }
 
             if(params.password === undefined) 
-                { reject( _u.jsonError(keys.errPasswordIsMandatory,errCodes,messages) ) }
+                { reject( _u.jsonError(keys.errPasswordIsMandatory,errCodes,messages) ); return }
             
             this.userdata.checkIfMailExists(params.email)
                 .then( (result) => {

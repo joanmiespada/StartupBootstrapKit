@@ -12,12 +12,11 @@ export class todoData extends data
     {
         super(storage)
         this.todoMetaData = {
-        
-                title : 'string',
-                description : 'string',
-                dateCreation : 'timestamp',
-                //changes:  'array of todo',
-                id: 'uuid'    
+            id: 'uuid',         
+            title : 'string',
+            description : 'string',
+            dateCreation : 'timestamp'
+            //changes:  'array of todo'
         }
     
     }
@@ -160,10 +159,10 @@ export class todoData extends data
 
             const todoListRef = this.storage.db.collection( this.storage.tables.todoList )
            
-            /*this.storage.deleteById(todoListRef, id)
+            this.storage.deleteById(todoListRef, id)
                 .then(()=> resolve( _u.jsonOK({deleted:true}, {deleted:'bool'}) ) )
                 .catch(err=>reject( _u.jsonError(err)))
-                */
+                
         });
     }
     

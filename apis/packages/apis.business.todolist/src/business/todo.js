@@ -53,9 +53,9 @@ export class todoLogic extends business
             if(userTokenRequired && !validation.result) { reject(validation); return }
             
             if(params.todoListId === undefined) 
-                { reject( _u.jsonError(keys.errTodoListIdIsMandatory,errCodes,messages ) ) }
+                { reject( _u.jsonError(keys.errTodoListIdIsMandatory,errCodes,messages ) ); return }
             if(params.title === undefined) 
-                { reject( _u.jsonError(keys.errTitleIsMandatory,errCodes,messages ) ) }
+                { reject( _u.jsonError(keys.errTitleIsMandatory,errCodes,messages ) ); return }
             
             this.data.checkIfTodoExists(params.todoListId, params.title)
                 .then( (result) => {

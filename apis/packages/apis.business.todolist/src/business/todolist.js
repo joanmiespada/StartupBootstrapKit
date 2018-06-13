@@ -25,7 +25,7 @@ export class todoListLogic extends business
         return todoList
     }
 
-    getAllTodoLists(uToken,params)
+    getAllTodoLists(uToken,params,filter)
     {
         return new Promise( (resolve,reject) => {
             
@@ -35,7 +35,7 @@ export class todoListLogic extends business
             validation = _u.extracPageNumberPageSize(params)  
             if(!validation.result) { reject(validation); return } 
             
-            this.data.getAllUsers(validation.data)
+            this.data.getAllTodoLists(validation.data,filter)
                 .then( result => resolve(result) )
                 .catch( err => reject(err) )
                
@@ -53,10 +53,16 @@ export class todoListLogic extends business
             if(userTokenRequired && !validation.result) { reject(validation); return }
             
             if(params.title === undefined) 
-                { reject( _u.jsonError(keys.errTitleIsMandatory,errCodes,messages ) ) }
+                { 
+                    reject( _u.jsonError(keys.errTitleIsMandatory,errCodes,messages ) ) 
+                    return
+                }
             
             if(params.owner === undefined) 
-                { reject( _u.jsonError(keys.errOwnerIsMandatory,errCodes,messages ) ) }
+                { 
+                    reject( _u.jsonError(keys.errOwnerIsMandatory,errCodes,messages ) ) 
+                    return
+                }
             
             this.data.checkIfTodoListExists(params.title)
                 .then( (result) => {
@@ -66,9 +72,9 @@ export class todoListLogic extends business
                         return
                     }
                     
-                    let newTodoList = this.mappingFromRequestToTodoListModel(params);
+                    let newTodoList = this.mappingFromRequestToTodoListModel(params)
                     
-                    this.data.createNewUser(newTodoList)
+                    this.data.createNewTodoList(newTodoList)
                         .then( result => resolve(result) )
                         .catch( err => reject(err) )
     
@@ -91,14 +97,14 @@ export class todoListLogic extends business
         })
     }
 
-    getTodoListByTitle(uToken,title)
+    getTodoListByTitle(uToken,title,userId)
     {
         return new Promise( (resolve,reject) => {
 
             const validation = _u.checkUserToken(uToken)
             if(!validation.result) { reject(validation); return }
 
-            this.data.getTodoListByTitle(title)
+            this.data.getTodoListByTitle(title,userId)
                 .then( result => resolve(result) )
                 .catch( err => reject(err) )
         })
@@ -118,13 +124,13 @@ export class todoListLogic extends business
         
     }
 
-    checkIfTodoListExists(uToken,title)
+    checkIfTodoListExists(uToken,title,userid)
     {
         return new Promise( (resolve,reject) => {
             const validation = _u.checkUserToken(uToken)
             if(!validation.result) { reject(validation); return }
 
-            this.data.checkIfTodoListExists(title)
+            this.data.checkIfTodoListExists(title, userid)
                 .then( result => resolve(result) )
                 .catch( err  => reject(err) )
         })
@@ -137,7 +143,7 @@ export class todoListLogic extends business
             if(!validation.result) { reject(validation); return }
 
             const todolistmod =  this.mappingFromRequestToTodoListModel(params);
-            this.data.updateUserById(id,todolistmod)
+            this.data.updateTodoListById(id,todolistmod)
                 .then( result => resolve(result) )
                 .catch( err  => reject(err) )
         })

@@ -11,14 +11,14 @@ class todoList extends model
 {
     constructor() {
         super();
-        this.todoList   = undefined
+        this.todos   = undefined
         this.owner      = undefined
         this.title      = undefined
         this.description = undefined
     }
 
-    get TodoList(){ return this.todoList}
-    set TodoList(value) { this.todoList=value}
+    get ToDos(){ return this.todos}
+    set ToDos(value) { this.todos=value}
 
     get Owner(){ return this.owner}
     set Owner(value) { this.owner=value}
