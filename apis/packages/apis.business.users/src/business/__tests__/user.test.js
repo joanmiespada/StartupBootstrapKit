@@ -5,7 +5,7 @@ import uuid from 'uuid/v1'
 import path from 'path'
 import dotenv from 'dotenv'
 
-import {encrypt, firebase, mongodb } from 'apis-core'
+import {encrypt, firebase, mongodb, apiParams } from 'apis-core'
 
 import {userLogic} from '../user'
 import {userData} from '../../data/user'
@@ -37,8 +37,8 @@ describe('user testing', ()=>{
         else{
             storage = new mongodb();
 
-            client = await mongo.MongoClient.connect('mongodb://localhost:27017'); 
-            database = await client.db('db');
+            client = await mongo.MongoClient.connect(`mongodb://${apiParams.mongo.host}:${apiParams.mongo.port}`); 
+            database = await client.db(apiParams.mongo.database);
 
             storage.start( {client, database})
         }

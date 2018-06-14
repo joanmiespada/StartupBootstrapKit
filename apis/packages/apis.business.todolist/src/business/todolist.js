@@ -64,7 +64,7 @@ export class todoListLogic extends business
                     return
                 }
             
-            this.data.checkIfTodoListExists(params.title)
+            this.data.checkIfTodoListExists(params.title, params.owner )
                 .then( (result) => {
                     
                     if(result.result && result.data.exists){

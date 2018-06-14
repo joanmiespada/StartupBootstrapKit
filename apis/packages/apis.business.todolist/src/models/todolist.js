@@ -1,5 +1,4 @@
 import {model} from 'apis-core'
-
 /**
  * TodoList class model implementation
  * @param {Array} todoList - list of instances todo stored in this collection

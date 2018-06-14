@@ -87,20 +87,29 @@ export class mongodb extends storage
     
     }
 
-    pagedQuery(collection, condition, params, secondCondition = undefined)
+    pagedQuery(collection, order, params, condition = undefined)
     {
-        return collection.find(secondCondition).skip(params.pageSize*(params.pageNum-1)).limit(params.pageSize).sort(  JSON.parse(`{ "${condition}": 1 }`) )
+        return collection.find(condition).skip(params.pageSize*(params.pageNum-1))
+                                         .limit(params.pageSize)
+                                         .sort( JSON.parse(`{ "${order}": 1 }`) )
     }
 
-    executePagedQueryAndFetch(collection, condition, params, filter = undefined)
+    executePagedQueryAndFetch(collection, order, params, filter = undefined)
     {
         return new Promise(async (resolve) => {
-            let secondCondition = {}
+
+            let condition = {}
             if(filter)
-                secondCondition = queryPattern(filter.field, filter.operator, filter.value)
-            const totalItems = await collection.find(secondCondition).count()
-            const cursor =  this.pagedQuery(collection,condition, params, secondCondition )
+                condition = queryPattern(filter.field, translateOperators(filter.operator), filter.value)
+            
+            const totalItems = await collection.find(condition).count()
+            if(totalItems===0)
+            {
+                resolve({pageItems: Immutable.Set([]),totalItems:0 })
+            }
+            const cursor =  this.pagedQuery(collection,order, params, condition )
             cursor.toArray( (err,data)=>{
+                //console.log(data)
                 const pageItems = Immutable.Set(data)
                 resolve( {pageItems,totalItems })
             }) 
@@ -124,7 +133,7 @@ export class mongodb extends storage
         
         //obj = recursiveQueryPattern(field.split('.') ,translate, value)
         obj = queryPattern(field,translate, value)
-        console.log(obj)
+        //console.log(obj)
         const aux = JSON.parse(obj)
         return aux; 
     }

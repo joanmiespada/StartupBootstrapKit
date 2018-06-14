@@ -3,6 +3,8 @@ import fs from 'fs'
 import {storage } from './definition'
 import Immutable from 'immutable'
 
+const isJson = (obj)=> typeof obj === "object" ? true : false
+
 export class firebase extends storage
 {
 
@@ -42,16 +44,26 @@ export class firebase extends storage
     return 0; 
   }
 
-  pagedQuery(obj, condition, params)
+  pagedQuery(obj, order, params)
   {
-    return obj.orderBy(condition).startAfter(params.pageSize * (params.pageNum-1) ).limit(params.pageSize)
+
+    return obj.orderBy(order).startAfter(params.pageSize * (params.pageNum-1) ).limit(params.pageSize)
   }
 
-  executePagedQueryAndFetch(collection, condition, params)
+  executePagedQueryAndFetch(collection, order, params, conditions = undefined)
   {
       return new Promise(async (resolve) => {
-          const totalItems = undefined
-          const query =  this.pagedQuery(collection,condition, params )
+
+          let query = undefined
+          if(conditions)
+          {
+            query = this.where(collection, conditions.field, conditions.operator, conditions.value  )
+            query =  this.pagedQuery(query,order, params, conditions )
+          }else
+            query =  this.pagedQuery(collection,order, params, conditions )
+
+          const totalItems = undefined //TO BE Implemented with external counters when someone add/delete docs in collection
+          
           this.executeAndFetch(collection,query).then( pageItems => resolve( {pageItems,totalItems } ) )
       })
   }
@@ -66,16 +78,35 @@ export class firebase extends storage
     return collection.where(field,condition,value )
   }
 
+  whereList(collection, conditions)
+  {
+     
+      let res = `collection`
+      conditions.forEach(value=> 
+      {
+        if(isJson(value))
+          res += `.where('${value.field}','${value.operator}','${value.value}')`
+        else if( typeof value === "string" ) 
+          if( value.toLowerCase() === 'or')
+            throw new Error('OR clausule Not admitted in FireBase/FireStore')
+        
+      })
+      return eval(res)
+  }
+
   execute(collection,query)
   {
     return query.get()
   }
+
   executeAndFetch(collection, query)
   {
 
     return new Promise( (resolve, reject) => {
+      
         query.get().then( (snapshot) => {
-
+          
+          
           let total=[], aux = undefined
           if(!snapshot.empty )
           {

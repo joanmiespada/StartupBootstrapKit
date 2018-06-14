@@ -1,6 +1,6 @@
 
 import expect from 'expect'
-//import chance from 'chance'
+import chance from 'chance'
 import uuid from 'uuid/v1'
 import path from 'path'
 import dotenv from 'dotenv'
@@ -23,7 +23,7 @@ if(!isTravis)
 describe('todoList testing', ()=>{
 
     let storage = undefined;
-    let todoListlayer, uToken//, newTodoList
+    let todoListlayer, uToken, newTodoList
 
     beforeAll( async ()=> 
     {
@@ -59,20 +59,18 @@ describe('todoList testing', ()=>{
         storage.close()
     })
 
-   // const random = new chance()
-    //let newId = undefined
-    //const userId = 'b0b62410-697f-11e8-a306-0707e0b7a7f3'
+    const random = new chance()
+    let newId = undefined
+    const userId = 'b0b62410-697f-11e8-a306-0707e0b7a7f3'
     
-    /*
+    
     it('create new todoList', async ()=>{
         try{
-                    
-
-            
             newTodoList = {title:random.sentence() , description: random.paragraph(), owner: userId }
             const result = await todoListlayer.createNewTodoList(uToken, newTodoList)
             
-           //newId = result.data.id;
+            newId = result.data.id
+            //console.log(newId)//eslint-disable-line
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
             expect(result.data.id).toBeTruthy()
@@ -81,8 +79,6 @@ describe('todoList testing', ()=>{
             expect(false).toEqual(true)
         }
     })
-    
-    
 
     it('create new todo list with same title', async()=>{
         
@@ -152,7 +148,7 @@ describe('todoList testing', ()=>{
 
      it('delete existing todo list', async()=>{ 
         try{
-            const newId = 'bcabe830-6f11-11e8-b3a2-f7bd6abed726'
+            //const newId = 'bcabe830-6f11-11e8-b3a2-f7bd6abed726'
             const result = await todoListlayer.deleteTodoListById(uToken,newId)
         
             expect(result).toBeDefined()
@@ -177,18 +173,18 @@ describe('todoList testing', ()=>{
             expect(result.data.deleted).toEqual(false)
         }
     })
-*/
+
     it('get all todo lists', async()=>{ 
         try{
-            const userId = 'b0b62410-697f-11e8-a306-0707e0b7a7f3'
+            
             const params = {pageSize: 10, pageNumber:1}
             let result = await todoListlayer.getAllTodoLists (uToken,params,userId)
             
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
-            expect(result.data.users).toBeDefined()
+            expect(result.data.todoLists).toBeDefined()
+           // expect(result.data.totalTodoLists).toBeDefined()
             
-
         }catch(err){
             console.log(err) //eslint-disable-line
             expect(false).toEqual(true)

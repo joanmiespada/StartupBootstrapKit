@@ -44,16 +44,17 @@ export class todoListData extends data
 
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
             //const query = this.storage.pagedQuery(todoListRef,'data.surname',params)
-            const filterObj = { field:'id', operator:'==', value: filter }
+            const filterObj = { field:'data.owner', operator:'==', value: filter }
             
-            this.storage.executePagedQueryAndFetch(todoListRef,'data.owner', params, filterObj) 
-                .then( (snapshot) => {  
+            this.storage.executePagedQueryAndFetch(todoListRef,'data.title', params, filterObj) 
+                .then( (snapshot) => { 
+                    
                     const finalList = snapshot.pageItems.map( (x)=>{
                         const item =  this.mappingFromStorageToTodoListModel(x.data) 
                         return item
                         })
                     
-                    resolve( _u.jsonOK({todoList:finalList.toArray(), totalTodos:snapshot.totalItems}))
+                    resolve( _u.jsonOK({todoLists:finalList.toArray(), totalTodoLists:snapshot.totalItems}))
                 })
                 .catch( (err) => { reject(_u.jsonError(err) ) } )
         });
@@ -76,12 +77,19 @@ export class todoListData extends data
                 
                 let obj={
                     meta: this.todoListsMetaData,
-                    data: todoListModel
+                    data: {
+                        id: todoListModel.Id,
+                        title: todoListModel.Title,
+                        description: todoListModel.Description,
+                        todos: [],
+                        owner: todoListModel.Owner 
+                    }
+                    
                 };
                 
                 this.storage.createById(todoListRef, id, obj)
-                    .then(  ()  => resolve(_u.jsonOK({id:id}, {id:'uuid'} ) ) ) 
-                    .catch( err => reject (_u.jsonError(err) ) )
+                    .then (  ()  => resolve(_u.jsonOK({id:id}, {id:'uuid'} ) ) ) 
+                    .catch( err  => reject (_u.jsonError(err) ) )
                 
             }catch(err)
             {

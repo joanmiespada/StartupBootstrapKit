@@ -6,6 +6,8 @@ import errCodes from './errorcodes'
 import keys from './keys'
 import apiParams from './apiparams'
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 const checkUserToken = (uToken) => 
 {
     try{
@@ -26,6 +28,8 @@ const buildError = (key, errorCodes = errCodes , messageStrings= messages) =>
 
 const jsonError = (key, errorCodes = errCodes , messageStrings= messages) =>
 {
+    if(!isProduction)
+        console.log(key)
     return {
         result: false, 
         error: buildError( key, errorCodes, messageStrings )
