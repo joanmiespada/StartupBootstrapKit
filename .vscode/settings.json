@@ -1,0 +1,6 @@
+{
+    "vscode-janus-debug.uploadOnSave": [
+        "todolist",
+        "todo"
+    ]
+}

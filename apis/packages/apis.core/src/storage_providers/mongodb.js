@@ -195,7 +195,18 @@ export class mongodb extends storage
 
     updateById(collection,id, values)
     {
-        collection.updateOne({_id:id},{ $set: values } )
+        return new Promise( (resolve, reject)=>{
+
+            collection.updateOne({_id:id},{ $set: values } ).then( (res) =>{
+                    const result = res.result
+                    if(result.n===1 && result.ok===1 )
+                        resolve(true)
+                    else   
+                        reject(true)
+            })
+        
+        })
+        
     }
 
     deleteById(collection, id)

@@ -1,7 +1,7 @@
 import {messages} from 'apis-core'; 
 
 let myMessages = {  
-    errNoTodoListExistWithId: 'no todo list exist with id',
+    errNoTodoListExistWithId: 'todolist doesn\'t exist with id',
     errTitleIsMandatory: 'title is mandatory',
     errTitleAlreadyExists: 'title already exists',
     errTodoListIdIsMandatory: 'todo list id is mandatory',

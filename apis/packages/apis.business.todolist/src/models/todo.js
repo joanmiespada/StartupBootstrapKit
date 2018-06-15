@@ -14,7 +14,7 @@ class todo extends model
         this.title       = undefined
         this.description = undefined
         this.dateCreation= undefined
-        this.changes     = undefined
+        this.changes     = []
     }
 
     get Title(){ return this.title}
@@ -29,6 +29,38 @@ class todo extends model
     get Changes(){ return this.changes}
     set Changes(value) { this.changes=value}
 
+    static get Meta()  {
+        const obj = super.Meta
+        obj['title'] = 'string'
+        obj['description'] = 'string'
+        obj['dateCreation'] = 'date'
+        obj['changes'] = 'array of'
+        return obj
+    }
+
+    plainObject()
+    {
+        let obj= super.plainObject()
+        obj['title'] = this.title
+        obj['description'] = this.description
+        obj['dateCreation'] = this.dateCreation
+        obj['changes'] = this.changes
+
+        return obj
+    
+    }
+
+    static mappingToModel(ttd)
+    {
+        const todo = new todo()   
+        todo.Id = ttd.id
+        todo.Vers = ttd.vers
+        todo.Title = ttd.title
+        todo.Description = ttd.description
+        todo.DateCreation = ttd.dateCreation
+        todo.Changes = Object.assign({}, ttd.changes)
+        return todo
+    }
 }
 
 export default todo; 

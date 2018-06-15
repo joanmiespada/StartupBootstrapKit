@@ -5,6 +5,7 @@ import errCodes from '../support/errorcodes'
 import keys from '../support/keys'
 import {business, utils as _u} from 'apis-core'
 
+const jsonError = (key) => _u.jsonError(key,errCodes,messages)
 
 export class todoLogic extends business
 {
@@ -14,14 +15,13 @@ export class todoLogic extends business
         this.data = dataaccess
     }
 
-    mappingFromRequestToTodoListModel(params)
+    mappingFromRequestToTodoModel(params)
     {
         let todo = new todoModel() 
         todo.Id = params.id
         todo.Title = params.title
         todo.Description = params.description
         todo.DateCreation = params.dateCreation
-        //todoList.list = params.list
         return todo
     }
 
@@ -44,30 +44,33 @@ export class todoLogic extends business
          
     }
 
-    createNewTodo(uToken,params, userTokenRequired = true)
+    createNewTodo(uToken, todoListId, newTodoItem, userTokenRequired = true)
     {
         return new Promise( (resolve,reject) => {
 
             let validation = _u.checkUserToken(uToken)
             
             if(userTokenRequired && !validation.result) { reject(validation); return }
+
+            if(todoListId === undefined) 
+                { reject( jsonError(keys.errTodoListIdIsMandatory ) ); return }
+            if(newTodoItem.title === undefined) 
+                { reject( jsonError(keys.errTitleIsMandatory ) ); return }
             
-            if(params.todoListId === undefined) 
-                { reject( _u.jsonError(keys.errTodoListIdIsMandatory,errCodes,messages ) ); return }
-            if(params.title === undefined) 
-                { reject( _u.jsonError(keys.errTitleIsMandatory,errCodes,messages ) ); return }
             
-            this.data.checkIfTodoExists(params.todoListId, params.title)
+            this.data.checkIfTodoExists(todoListId, newTodoItem.title)
                 .then( (result) => {
                     
                     if(result.result && result.data.exists){
-                        reject( _u.jsonError(keys.errTitleAlreadyExists,errCodes,messages) )
+                        reject( jsonError(keys.errTitleAlreadyExists ) )
                         return
                     }
                     
-                    let newTodo = this.mappingFromRequestToTodoModel(params);
+                    let newTodo = this.mappingFromRequestToTodoModel(newTodoItem);
+
+                    console.log(todoModel.Meta)
                     
-                    this.data.createNewTodo(newTodo)
+                    this.data.createNewTodo(todoListId,newTodo)
                         .then( result => resolve(result) )
                         .catch( err => reject(err) )
     

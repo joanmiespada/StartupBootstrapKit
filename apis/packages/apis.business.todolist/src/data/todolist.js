@@ -5,6 +5,7 @@ import messages from '../support/messages'
 import keys from '../support/keys'
 import errCodes from '../support/errorcodes'
 
+const jsonError = (key) => _u.jsonError(key,errCodes,messages)
 
 export class todoListData extends data
 {
@@ -27,7 +28,7 @@ export class todoListData extends data
         todoList.Title = ttdList.title
         todoList.Description = ttdList.description
         todoList.Owner = ttdList.owner
-        //todoList.todos = ...ttdList.changes
+        todoList.ToDos = Object.assign({}, ttdList.todos)
         return todoList
     }
 
@@ -38,7 +39,7 @@ export class todoListData extends data
         return new Promise( (resolve, reject) => {
 
             if(this.storage.db === undefined){
-                reject( _u.jsonError(keys.errServerDataIsUnavailable))
+                reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
@@ -56,7 +57,7 @@ export class todoListData extends data
                     
                     resolve( _u.jsonOK({todoLists:finalList.toArray(), totalTodoLists:snapshot.totalItems}))
                 })
-                .catch( (err) => { reject(_u.jsonError(err) ) } )
+                .catch( (err) => { reject(jsonError(err) ) } )
         });
     }
 
@@ -65,7 +66,7 @@ export class todoListData extends data
         return new Promise( async (resolve,reject)=>{
 
             if(this.storage.db === undefined){
-                reject( _u.jsonError(keys.errServerDataIsUnavailable))
+                reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
             
@@ -81,7 +82,7 @@ export class todoListData extends data
                         id: todoListModel.Id,
                         title: todoListModel.Title,
                         description: todoListModel.Description,
-                        todos: [],
+                        todos: todoListModel.ToDos,
                         owner: todoListModel.Owner 
                     }
                     
@@ -89,11 +90,11 @@ export class todoListData extends data
                 
                 this.storage.createById(todoListRef, id, obj)
                     .then (  ()  => resolve(_u.jsonOK({id:id}, {id:'uuid'} ) ) ) 
-                    .catch( err  => reject (_u.jsonError(err) ) )
+                    .catch( err  => reject (jsonError(err) ) )
                 
             }catch(err)
             {
-                reject(_u.jsonError(err))
+                reject(jsonError(err))
             }
             
         });
@@ -103,7 +104,7 @@ export class todoListData extends data
     {
         return new Promise( (resolve,reject)=>{
             if(this.storage.db === undefined){
-                reject( _u.jsonError(keys.errServerDataIsUnavailable))
+                reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
@@ -114,7 +115,7 @@ export class todoListData extends data
 
                     const todoLstInDbList = await this.storage.fetch(doc) 
 
-                    if(todoLstInDbList.length!==1){ reject( _u.jsonError( keys.errNoUserExistWithId,errCodes, messages))}
+                    if(todoLstInDbList.length!==1){ reject( jsonError( keys.errNoUserExistWithId,errCodes, messages))}
 
                     const todoListInDb = todoLstInDbList[0];
                     
@@ -130,7 +131,7 @@ export class todoListData extends data
                     this.storage.updateById(todoListRef,id,todoListInDb )
 
                     resolve( _u.jsonOK({updated:true},{updated:'bool'}) );
-                }).catch(err=> reject( _u.jsonError(err)));
+                }).catch(err=> reject( jsonError(err)));
         });
     }
 
@@ -138,7 +139,7 @@ export class todoListData extends data
     {
         return new Promise( (resolve,reject) => {
             if(this.storage.db === undefined){
-                reject( _u.jsonError(keys.errServerDataIsUnavailable))
+                reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
             
@@ -161,7 +162,7 @@ export class todoListData extends data
                         resolve(_u.jsonOK( {exists:true}, {exists:'bool'}))
                     }
             }).catch(err =>{
-                 reject(_u.jsonError(err))
+                 reject(jsonError(err))
             })
         });
     }
@@ -170,7 +171,7 @@ export class todoListData extends data
     {
         return new Promise( (resolve, reject) => {
             if(this.storage.db === undefined){
-                reject( _u.jsonError(keys.errServerDataIsUnavailable))
+                reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
@@ -178,7 +179,7 @@ export class todoListData extends data
            
             this.storage.deleteById(todoListRef, id)
                 .then(()=> resolve( _u.jsonOK({deleted:true}, {deleted:'bool'}) ) )
-                .catch(err=>reject( _u.jsonError(err)))
+                .catch(err=>reject( jsonError(err)))
         });
     }
     
@@ -186,7 +187,7 @@ export class todoListData extends data
     {
         return new Promise( (resolve, reject) => {
             if(this.storage.db === undefined){
-                reject( _u.jsonError(keys.errServerDataIsUnavailable))
+                reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
@@ -197,7 +198,8 @@ export class todoListData extends data
                     const todoListDataMeta = todoLstList[0]
                     const todoList = this.mappingFromStorageToTodoListModel(todoListDataMeta.data )
                     resolve( _u.jsonOK( todoList, this.todoListsMetaData ) )
-                    }).catch(err => reject( _u.jsonError(err) ))
+                })
+                .catch(err => reject( jsonError(err) ))
             })
     }
 
@@ -205,19 +207,21 @@ export class todoListData extends data
     {
         return new Promise( (resolve, reject) => {
             if(this.storage.db === undefined){
-                reject( _u.jsonError(keys.errServerDataIsUnavailable))
+                reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
 
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
             const query = this.storage.where(todoListRef,'data.title','==',title  )
             
-            this.storage.executeAndFetch(todoListRef,query).then( (users) => {  
+            this.storage.executeAndFetch(todoListRef,query)
+            .then( (users) => {  
 
                 const finalList = users.map( x=>this.mappingFromStorageToTodoListModel(x.data))
                 
                 resolve( _u.jsonOK( finalList.toArray() ,  { data:'array',userType: this.todoListsMetaData} ) )
-            }).catch( (err) => reject( _u.jsonError(err) ) )
+            })
+            .catch( (err) => reject( jsonError(err) ) )
             
         });
     }
