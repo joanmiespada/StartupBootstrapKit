@@ -52,14 +52,14 @@ class todo extends model
 
     static mappingToModel(ttd)
     {
-        const todo = new todo()   
-        todo.Id = ttd.id
-        todo.Vers = ttd.vers
-        todo.Title = ttd.title
-        todo.Description = ttd.description
-        todo.DateCreation = ttd.dateCreation
-        todo.Changes = Object.assign({}, ttd.changes)
-        return todo
+        const todoRes = new todo()   
+        todoRes.Id = ttd.id
+        todoRes.Vers = ttd.vers
+        todoRes.Title = ttd.title
+        todoRes.Description = ttd.description
+        todoRes.DateCreation = ttd.dateCreation
+        todoRes.Changes = Object.assign({}, ttd.changes)
+        return todoRes
     }
 }
 

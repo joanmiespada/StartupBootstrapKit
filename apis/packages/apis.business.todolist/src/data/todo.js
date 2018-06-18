@@ -6,6 +6,7 @@ import keys from '../support/keys'
 import errCodes from '../support/errorcodes'
 import moment from 'moment'
 
+
 const jsonError = (key) => _u.jsonError(key,errCodes,messages)
 
 
@@ -16,9 +17,6 @@ export class todoData extends data
         super(storage)
     }
 
-    
-
-    
     getAllTodos(todoListId, params)
     {
         return new Promise( (resolve, reject) => {
@@ -29,16 +27,26 @@ export class todoData extends data
             }
 
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
-            //const query = this.storage.pagedQuery(todoListRef,'data.surname',params)
+            const query = this.storage.where(todoListRef, 'data.id', '==', todoListId  )
             
-            this.storage.executePagedQueryAndFetch(todoListRef,'data.id',params) 
-                .then( (snapshot) => {  
-                    const finalList = snapshot.pageItems.map( (x)=>{
-                        const item =  this.mappingFromStorageToTodoModel(x.data) 
-                        return item
-                        })
+            this.storage.executeAndFetch(todoListRef,query)
+                .then( (snapshot) => {
+                    const doc = snapshot.first()
+                    const todos = doc.data.todos  
+
+                    const result = []
+                    let initPosition=0
+                    let j=0
+                    initPosition = Number(params.pageSize) * ( Number(params.pageNumber)-1)
                     
-                    resolve( _u.jsonOK({todoList:finalList.toArray(), totalTodos:snapshot.totalItems}))
+                    for(let i=initPosition; i < todos.length && j< params.pageSize; i++ )
+                    {
+                        const item = todos[i]
+                        j++;
+                        const aux = todoModel.mappingToModel(item.data)
+                        result.push(aux)
+                    }
+                    resolve( _u.jsonOK({todos:result, totalTodos:todos.length }))
                 })
                 .catch( (err) => { reject(jsonError(err) ) } )
         });
@@ -85,7 +93,7 @@ export class todoData extends data
         })
     }
 
-    updateTodoById(todoListId, id, todoModel)
+    updateTodoById(todoListId, id, changesTodoModel)
     {
         return new Promise( (resolve,reject)=>{
             if(this.storage.db === undefined){
@@ -95,27 +103,57 @@ export class todoData extends data
 
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists );
 
-            this.storage.findById(todoListRef, todoListId)
+            const conditions =  [ {field:'data.id',
+                                operator: '==',
+                                value: todoListId },
+                                'and',
+                                {field:'data.todos.data.id',
+                                operator: '==',
+                                value: id }, 
+                            ]
+            const query = this.storage.whereList(todoListRef, conditions )
+            
+            this.storage.executeAndFetch(todoListRef,query)
                 .then(async (doc) => {
 
-                    const todoLstInDbList = await this.storage.fetch(doc) 
+                    const info = doc.first()
+                    
+                    if(info === undefined)
+                    {
+                        reject( jsonError(keys.errNoTodoExistWithId)) 
+                        return
+                    }
+                    info.data.todos.forEach(item=>{
+                        if(item.data.id === id)
+                        {
+                        
+                            if(changesTodoModel.Title != undefined)
+                                item.data.title = changesTodoModel.Title;
+                            if(changesTodoModel.Description != undefined)
+                                item.data.description = changesTodoModel.Description
 
-                    if(todoLstInDbList.length!==1){ reject( jsonError( keys.errNoUserExistWithId,errCodes, messages))}
+                            this.storage.updateById(todoListRef,todoListId, item )
+                                .then(()=>{
+                                    resolve( _u.jsonOK({updated:true},{updated:'bool'}) )
+                                })
+                                .catch(err=>reject(err))
+                            
+                            
+                           
 
-                    const todoListInDb = todoLstInDbList[0];
+                        }
+
+                    })
+
+                    
+
+                   
                     
             
-                    if(todoModel.Title != undefined)
-                        todoListInDb.data.title = todoModel.Title;
-                    if(todoModel.Description != undefined)
-                        todoListInDb.data.description = todoModel.Description;
-                    if(todoModel.Owner != undefined)
-                        todoListInDb.data.owner = todoModel.Owner;
+                   
                     
                     
-                    this.storage.updateById(todoListRef,id,todoListInDb )
-
-                    resolve( _u.jsonOK({updated:true},{updated:'bool'}) );
+                   
                 }).catch(err=> reject( jsonError(err)));
         });
     }
@@ -124,39 +162,38 @@ export class todoData extends data
     {
         return new Promise( (resolve,reject) => {
 
+            //console.log(`${todoListId} ${title}`)
             if(this.storage.db === undefined) {
                 reject( jsonError(keys.errServerDataIsUnavailable))
                 return
             }
             
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
-            const query = this.storage.where(todoListRef, 'data.id', '==', todoListId  )
+
+            const conditions =  [ {field:'data.id',
+                                operator: '==',
+                                value: todoListId },
+                                'and',
+                                {field:'data.todos.data.title',
+                                operator: '==',
+                                value: title }, 
+                            ]
+            let query = this.storage.whereList(todoListRef, conditions )
             
             this.storage.executeAndFetch(todoListRef,query).then((snapshot) => {
-                    if(snapshot.size !== 1)
-                    {
-                        reject( jsonError(keys.errNoTodoListExistWithId))
-                        return
-                    }else{
-                            const docFound = snapshot.first()
-                            
-                            if(docFound.todos == null) 
-                                { resolve(_u.jsonOK( {exists:false}, {exists:'bool'} )); return }
-                            
-                            docFound.todos.forEach(item=>{
-                                if(item.data.title === title)
-                                    {resolve(_u.jsonOK( {exists:true}, {exists:'bool'})); return }
-                            })
-                        
-                            resolve(_u.jsonOK( {exists:false}, {exists:'bool'} ));
-                    }
+                    //debug(snapshot)
+                    if(snapshot.size === 1)
+                        resolve(_u.jsonOK( {exists:true}, {exists:'bool'}))
+                    else
+                        resolve(_u.jsonOK( {exists:false}, {exists:'bool'} ))
+                    
             }).catch(err =>{
                  reject(jsonError(err))
             })
         });
     }
 
-    deleteTodoListById(todoListId,id)
+    deleteTodoById() //todoListId,id
     {
         return new Promise( (resolve, reject) => {
             if(this.storage.db === undefined){
@@ -164,12 +201,15 @@ export class todoData extends data
                 return
             }
 
+            //TODO: to be implemented
+            resolve( _u.jsonOK({deleted:true}, {deleted:'bool'}) ) 
+            /*
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
            
             this.storage.deleteById(todoListRef, id)
                 .then(()=> resolve( _u.jsonOK({deleted:true}, {deleted:'bool'}) ) )
                 .catch(err=>reject( jsonError(err)))
-                
+              */  
         });
     }
     
@@ -182,13 +222,36 @@ export class todoData extends data
             }
 
             const todoListRef = this.storage.db.collection( this.storage.tables.todoLists )
-            this.storage.findById(todoListRef, id)
+
+            const conditions =  [ {field:'data.id',
+                                operator: '==',
+                                value: todoListId },
+                                'and',
+                                {field:'data.todos.data.id',
+                                operator: '==',
+                                value: id }, 
+                            ]
+            const query = this.storage.whereList(todoListRef, conditions )
+            
+            this.storage.executeAndFetch(todoListRef,query)
                 .then(async (doc)=>{
-                    const todoLstList = await this.storage.fetch(doc)
-                    const todoListDataMeta = todoLstList[0]
-                    const todoList = this.mappingFromStorageToTodoListModel(todoListDataMeta.data )
-                    resolve( _u.jsonOK( todoList, this.todoListMetaData ) )
-                    }).catch(err => reject( jsonError(err) ))
+                    const info = doc.first()
+                    
+                    if(info === undefined)
+                    {
+                        reject( jsonError(keys.errNoTodoExistWithId)) 
+                        return
+                    }
+                    info.data.todos.forEach(item=>{
+                        if(item.data.id === id)
+                        {
+                            const result = todoModel.mappingToModel(item.data)
+                            resolve( _u.jsonOK( result, todoModel.Meta ) )
+                            return
+                        }
+                    })
+                    
+                }).catch(err => reject( jsonError(err) ))
             })
     }
 

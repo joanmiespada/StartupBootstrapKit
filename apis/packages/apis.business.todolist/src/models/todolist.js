@@ -10,7 +10,7 @@ class todoList extends model
 {
     constructor() {
         super();
-        this.todos   = undefined
+        this.todos   = []
         this.owner      = undefined
         this.title      = undefined
         this.description = undefined

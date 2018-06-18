@@ -7,7 +7,8 @@ let myErrorCodes = {
     errTitleIsMandatory:        base+1,
     errTitleAlreadyExists:      base+2,
     errTodoListIdIsMandatory:   base+3,
-    errOwnerIsMandatory:        base+4
+    errOwnerIsMandatory:        base+4,
+    errNoTodoExistWithId:       base+5
 };
 
 const result = Object.assign({}, errCodes, myErrorCodes);

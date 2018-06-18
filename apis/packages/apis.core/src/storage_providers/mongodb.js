@@ -141,7 +141,7 @@ export class mongodb extends storage
     whereList(collection, conditions)
     {
         let obj=undefined
-        
+     
         for(let i=0; i<conditions.length; i+=3) 
         {
             const leftValue = conditions[i]
@@ -153,11 +153,12 @@ export class mongodb extends storage
             const right = queryPattern(rightValue.field, translate, rightValue.value)
             
             const operator = translateOperators(conditions[i+1])
-            
+ 
             obj = queryPatternOperators(left, operator, right)
         }
         
         const aux = JSON.parse(obj)
+   
         return aux; 
     }
 
@@ -202,7 +203,7 @@ export class mongodb extends storage
                     if(result.n===1 && result.ok===1 )
                         resolve(true)
                     else   
-                        reject(true)
+                        reject(res)
             })
         
         })

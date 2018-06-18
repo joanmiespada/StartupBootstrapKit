@@ -68,7 +68,7 @@ export class todoLogic extends business
                     
                     let newTodo = this.mappingFromRequestToTodoModel(newTodoItem);
 
-                    console.log(todoModel.Meta)
+                    
                     
                     this.data.createNewTodo(todoListId,newTodo)
                         .then( result => resolve(result) )
@@ -87,7 +87,7 @@ export class todoLogic extends business
             const validation = _u.checkUserToken(uToken)
             if(!validation.result) { reject(validation); return }
 
-            this.data.getTodoById(id)
+            this.data.getTodoById(todoListId,id)
                 .then( result => resolve(result) )
                 .catch( err => reject(err) )
         })
