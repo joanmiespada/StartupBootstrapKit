@@ -87,8 +87,16 @@ export const bootstrap = (config) =>
         })
        
 
-        const logic = config.logic(express.Router(), storage  );
-        app.use(config.version + logic.urlbase, logic.router)
+        if(Array.isArray(config.logic))
+        {
+            config.logic.forEach(item=>{
+                const logic = item(express.Router(), storage  )
+                app.use(config.version + logic.urlbase, logic.router)    
+            })
+        }else{
+            const logic = config.logic(express.Router(), storage  )
+            app.use(config.version + logic.urlbase, logic.router)
+        }
 
         const server = app.listen(config.port, () => { 
             const aux= `Child process with PID: ${process.pid} - Server ${config.description} api is running at http://127.0.0.1:${config.port}`

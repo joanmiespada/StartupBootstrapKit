@@ -14,6 +14,7 @@ function loadModules(folder)
     .filter(function(x){
         return ['apis-business-login',
                 'apis-business-users',
+                'apis-business-todolist',
                 'apis-core'
                 ].indexOf(x) === -1;
     })

@@ -1,4 +1,4 @@
-version: 3.5
+version: '3.5'
 
 services:
 
@@ -34,6 +34,17 @@ services:
     depends_on: 
       - mongodb
   
+  todolistapi:
+    build: ./packages/apis.bootstrap.todolist
+    container_name: apitodolist
+    ports:
+      - "5082:8082"
+    networks: 
+      - backend
+    depends_on:
+      - loginapi 
+      - mongodb
+  
   nginxw:
     build: ./conf/nginx
     container_name: gateway
@@ -44,6 +55,7 @@ services:
       - mongodb
       - loginapi
       - userapi
+      - todolistapi
     networks: 
       - frontend
       - backend

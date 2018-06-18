@@ -1,6 +1,6 @@
 ### APIS
 
-Here you'll be able to explore a complete API build with NODE.JS from scratch. 
+Here you'll be able to explore a complete API example build with NODE.JS from scratch. 
 
 The technical stack is: 
 
@@ -28,8 +28,8 @@ lerna bootstrap
 If you are running with Node 10, please, use yarn with `--ignore-engines`
 
 Once all modules are in node_modules folder (in apis folder) you should run every API in unique terminal.
-First of all, starting with `loginapi` with command: `yarn nodemon-loginapi`.
-If you want execute CRUD operations to create users then run `yarn nodemon-userapi`. 
+First of all, you should start `loginapi` with command: `yarn nodemon` in folder `apis.bootstrap.login`.
+If you want execute CRUD operations to create users then run `yarn nodemon` in folder `apis.bootstrap.users`.
 However, if you want start all apis at the same time, execute: `yarn nodemon`.
 
 Please, check `package.json` script section for details.
@@ -81,8 +81,10 @@ Apis folder has been split by 5 projects:
 |----------|-------------|------|
 |apis.bootstrap.login| microservice for login features| [readme](./packages/apis.bootstrap.login) |
 |apis.bootstrap.users| microservice related with user's CRUD| [readme](./packages/apis.bootstrap.users) |
+|apis.bootstrap.todolist| microservice related with todoList's CRUD| [readme](./packages/apis.bootstrap.todolist) |
 |apis.business.login| business logic to provide login and tests| [readme](./packages/apis.business.login) |
 |apis.business.users| business logic with features related CRUD operations for users| [readme](./packages/apis.business.users) |
+|apis.business.todolist| business logic with features related CRUD operations for todoList| [readme](./packages/apis.business.todolist) |
 |apis.core| shared components for bootstrap and business packages|[readme](./packages/apis.core) |
 
 ### Docker
@@ -93,8 +95,8 @@ If you want to run all apis together:
 
 ### Testing
 
-Business test agains storage are in business packages. 
-Api test agains api are in bootstrap packages.
+Business test again storage are in business packages.
+Api test again api are in bootstrap packages.
 
 If you want to run all test: `yarn test` and lerna will execute this command in every package. 
 See package.json for details. 
