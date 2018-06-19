@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+
+  backoffice:
+    image: nginx-simple:latest
+    build: ./conf/backoffice
+    container_name: backofficeweb
+    restart: always
+    ports:
+      - "9091:80"
+    networks: 
+      - frontend
+    volumes:
+      - ./packages/backoffice.bootstrap/dist/:/var/www/
+  
+
+networks: 
+  frontend:
+
+
+# Start-up
+#docker-compose up -d
+# Close
+#docker-compose down
+
+# Delete all containers
+#docker rm $(docker ps -a -q)
+# Delete all images
+#docker rmi $(docker images -q)
+
+#docker exec -i -t b2346ce35464 /bin/bash
