@@ -10,7 +10,7 @@ cache:
 script: cd ./apis && yarn bootstrap --ignore-engines && yarn test-easy
 before_install:
 - openssl aes-256-cbc -K $encrypted_129fa02b03c4_key -iv $encrypted_129fa02b03c4_iv
-  -in apicert.pem.enc -out ./apicert.pem -d
+  -in ./apis/certs/apicert.pem.enc -out ./apis/certs/apicert.pem -d
 - docker-compose --version
 - docker-compose -f ./apis/docker-compose.yml up -d mongodb
 - npm install -g lerna
