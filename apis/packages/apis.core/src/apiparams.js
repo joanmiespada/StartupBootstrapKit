@@ -4,15 +4,12 @@ const apiParams = {
     pageSizeMax: 100,
 
     mongo:{
-        user:'root',
-        pass:'test123',
+        user: process.env.MONGOUSER,
+        pass: process.env.MONGOPASS,
         host:'localhost',
         port:'27017',
         database:'db'
     }
-
-
-
 };
 
 export default apiParams;

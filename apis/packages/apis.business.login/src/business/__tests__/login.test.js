@@ -11,9 +11,7 @@ import {userLogic, userData} from 'apis-business-users'
 import {loginLogic} from '../login'
 import {loginData} from '../../data/login'
 
-const isTravis = process.env.TRAVIS === true
-
-if(!isTravis)
+if(process.env.PASSWORD_JWT === undefined)
 {
     const aux = path.join(__dirname,'../../../../../.env/env02.env')
     dotenv.config({ path: aux })
@@ -28,12 +26,15 @@ describe('login testing', ()=>{
     {
          
         let client=undefined, database=undefined
-        if(isTravis)
+
+        const dbengine = process.env.DBENGINE | 'mongo'
+
+        if(dbengine === 'firebase')
         {
             storage = new firebase();
             storage.start()
         }
-        else{
+        else {
             storage = new mongodb();
 
             client = await mongo.MongoClient.connect(`mongodb://${apiParams.mongo.host}:${apiParams.mongo.port}`); 

@@ -15,9 +15,7 @@ import {todoListData} from '../../data/todolist'
 
 import mongo from 'mongodb'
 
-const isTravis = process.env.TRAVIS === true
-
-if(!isTravis)
+if(process.env.PASSWORD_JWT === undefined)
 {
     const aux = path.join(__dirname,'../../../../../.env/env02.env')
     dotenv.config({ path: aux })
@@ -28,13 +26,13 @@ describe('todo testing', ()=>{
     let storage = undefined;
     let todoLayer, todoListlayer, userLayer, uToken
 
-    
-
     beforeAll( async ()=> 
     {
          
         let client=undefined, database=undefined
-        if(isTravis)
+        const dbengine = process.env.DBENGINE | 'mongo'
+
+        if(dbengine === 'firebase')
         {
             storage = new firebase();
             storage.start()
