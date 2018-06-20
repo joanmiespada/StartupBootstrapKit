@@ -13,8 +13,7 @@ before_install:
 - docker-compose -f ./apis/docker-compose.yml up -d mongodb
 - npm install -g lerna
 - npm install -g coveralls
-- openssl aes-256-cbc -K $encrypted_eab0cce9d941_key -iv $encrypted_eab0cce9d941_iv
-  -in ./apis/certs/apicert.pem.enc -out ./apis/certs/apicert.pem -d
+- openssl aes-256-cbc -K $encrypted_eab0cce9d941_key -iv $encrypted_eab0cce9d941_iv -in ./apis/certs/apicert.pem.enc -out ./apis/certs/apicert.pem -d
 dd:
   secure: mLDVVgeiLclu1f4HuN2S2/dLSjRGn0N/3N0dsUcXMNyAeKjJP667bZMeLhmFG8/md2nj21kEYrSxeRBuY6xT+FV+eK3oTNZa/nbAoCpmM3DDiPvsPp7WVAli7mterN9Jic8pY7HAPysCt2L9HcG5CFEo99Bniclv35an7U/FwhUGIiYnjj1LHK6cPHiM7WR65dgqwHxlOlx6u6v/ycSuEilJhbLyee8GhugWPZdW2sYg8kwAySXsJ8wIYi0EFy731HwfPUft1NdkCyQFtGj/GD1BBIPrZvMaoHL7QAPzAxjU5jEBr2hoLWMQlHLG5/YMMMqZQNNSGLXovCQ/yC4r1QH5wFum2p6L4cwkSWiPrnZnEw7Wlco2CY0tJdaojWeJy8REINi4d8O20qMsxrGgMLf2YwXIsLVgg59m+I8YcOZkB6Ij4C0aEge2XCtdbWI+wASkvSIviBxWRUxlQ7GBSHg3oW6007xtXwUJcTKskAtD6QevCI/PEQplDyM6kaAnv6nIWibUQmsDqXZk/nukso2O5OsjdYSTT9sPhagFQXOsqQUmFalXKNEBFydDrjcyrSF9MoW24sWC1JFGUGjrHZpAOI3ORJfqpfWBJPv+L066v0fx9RJPo6m9ujU4ToM2FK0dyqslDa/o5gMnLV2r7s9SnhJfLzRgcQYaoTVoEPU=
 after_success: coveralls
