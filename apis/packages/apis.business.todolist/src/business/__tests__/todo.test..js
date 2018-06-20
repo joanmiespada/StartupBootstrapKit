@@ -5,8 +5,8 @@ import uuid from 'uuid/v1'
 import path from 'path'
 import dotenv from 'dotenv'
 
-
 import {encrypt, firebase, mongodb, apiParams } from 'apis-core'
+import {userLogic, userData} from 'apis-business-users'
 
 import {todoLogic} from '../todo'
 import {todoData} from '../../data/todo'
@@ -23,10 +23,10 @@ if(!isTravis)
     dotenv.config({ path: aux })
 }
 
-describe('todoList testing', ()=>{
+describe('todo testing', ()=>{
 
     let storage = undefined;
-    let todoLayer, todoListlayer, uToken
+    let todoLayer, todoListlayer, userLayer, uToken
 
     
 
@@ -50,6 +50,7 @@ describe('todoList testing', ()=>{
         
         todoLayer = new todoLogic( new todoData( storage ) )
         todoListlayer = new todoListLogic( new todoListData( storage ) )
+        userLayer = new userLogic( new userData( storage ) )
 
         const userLogged = {
             id: uuid(),
@@ -70,11 +71,31 @@ describe('todoList testing', ()=>{
     let todoListId = undefined // '6a42d0b0-72de-11e8-9eef-c3ed311ffb8b'
     let newTodo= undefined
     let newTodoList = undefined
+    let userId = undefined
+
+    it('create new user', async ()=>{
+        try{
+            
+            const password = 'pepe'
+            const random = new chance()
+
+            const user = {email:random.email() , name: random.name() , surname: random.name(), password: password}
+            
+            const result = await userLayer.createNewUser(uToken, user)
+            
+            userId = result.data.id;
+            expect(result).toBeDefined()
+            expect(result.result).toEqual(true)
+            expect(result.data.id).toBeTruthy()
+        }catch(err){
+            console.log(err) //eslint-disable-line
+            expect(false).toEqual(true)
+        }
+    })
 
     it('create new todoList', async ()=>{
         try{
-            const userId = 'b0b62410-697f-11e8-a306-0707e0b7a7f3'
-
+            
             newTodoList = {title:random.sentence() , description: random.paragraph(), owner: userId }
             const result = await todoListlayer.createNewTodoList(uToken, newTodoList)
             
@@ -244,6 +265,21 @@ describe('todoList testing', ()=>{
         try{
             //const newId = 'bcabe830-6f11-11e8-b3a2-f7bd6abed726'
             const result = await todoListlayer.deleteTodoListById(uToken,todoListId)
+        
+            expect(result).toBeDefined()
+            expect(result.result).toEqual(true)
+            expect(result.data.deleted).toBeDefined()
+            expect(result.data.deleted).toEqual(true)
+
+        }catch(err){
+            console.log(err) //eslint-disable-line
+            expect(false).toEqual(true)
+        }
+    })
+
+    it('delete user', async()=>{ 
+        try{
+            const result = await userLayer.deleteUserById(uToken,userId)
         
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)

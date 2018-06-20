@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "apis-core": "1.0.0",
+    "apis-business-users": "1.0.0",
     "bcrypt": "^2.0.1",
     "crypto-js": "^3.1.9-1",
     "mongodb": "^3.0.10"

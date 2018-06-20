@@ -66,11 +66,11 @@ export class mongodb extends storage
                     this._db = config.database
                 }
 
-                this.message(`Pid:${process.pid} - Connection with mongo database ok`)
+                //this.message(`Pid:${process.pid} - Connection with mongo database ok`)
 
             }catch(err)
             {
-                this.message(`Pid:${process.pid} - Error connecting to mongo:` + err)
+                this.message(`Pid:${process.pid} - Error connecting to mongo: ` + err)
             }
     
     }
@@ -80,9 +80,11 @@ export class mongodb extends storage
         if(this._client !== undefined )
         {
         
-            this._client.close().then(()=>
-                this.message('connection with mongodb closed')
-            )
+            this._client.close().then(()=>{}
+                //this.message('connection with mongodb closed')
+            ).catch( (err=>{
+                this.message(`Pid:${process.pid} - Error closing mongo connection: ` + err)
+            } ) )
         }
     
     }

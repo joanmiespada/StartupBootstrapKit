@@ -163,7 +163,7 @@ describe('user testing', ()=>{
         }
     })
 
-     it('delete existing user', async()=>{ 
+    it('delete existing user', async()=>{ 
         try{
             const result = await userlayer.deleteUserById(uToken,newId)
         
