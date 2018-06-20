@@ -14,8 +14,6 @@ before_install:
 - docker-compose --version
 - docker-compose -f ./apis/docker-compose.yml up -d mongodb
 - npm install -g lerna
-- npm install -g coveralls
-after_success: coveralls
 env:
   global:
   - secure: oq4HMOUkQ6lfsvNYZjNjtjR6PRPTrkySLGx63zqyjKQMxmE7CeYDIvbnrpf7RMo1TYRuzj4KaAHpPOw3dZbHj/l/TwoUc/R4x1AXihzD9cs6f3XES7HfYGxeeJRulM7vbuurrBeHTT9CvCykcAIMLjgVGTzFiDUeKE6hRq8Dn5gaRZSrr+EtZh6Ft3zxmR8I9Oxlvt6Bh7LXeCgMtMcPLnQEMoNQYd0URH42faJHbzOMG5m4XXF0lJU2xr3XN1iBV1UIj/Ddi+2AjsT5L4ES2laSQGk1ovl9EI7l78E0lCh3pC3Yz9lRsI5NqGbTjrDtOcJb6b6fPjcKmq0W6NXhfUKdo0hpdHDJ6qhXOaH51r/Y8DWBamq+R9VaTTF0UZJJL1fpX/+Y4UVLVMTB4ZTVMKYXjphtHiBMLqhPFzrM2r47Z2wKkZRDmQ1v7qimejNcv7HdiMN+fcngLzPmf48hwVD+NMCTmO+JYZQInYO1QN3DX8yXFmUfq65+vSE3d6MTc4EyjEhuv+rQRZz1DyL97PX5kz/0CvtFYR+uN84tj6kQqyybhE7NSv/s5gBbdu1HE7/uL9JjswObiLNbISm1gHdTR2nXwgOFTuyXJJ8h6Cu6q6+wLJ3dQu+oB2ADYm0lXTRjFb0p3Qq+DdXULhv1HYgc2W2PWAwhv3BjQNn3csI=
