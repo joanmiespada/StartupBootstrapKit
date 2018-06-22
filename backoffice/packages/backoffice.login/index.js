@@ -1,9 +1,12 @@
-export * from './src/login'
+import Login from './src/component'
+import Container from './src/container'
 
-import * as actions from './src/actions'
-import * as reducers  from './src/reducers'
+export * from './src/reducers'
+export * from './src/types'
+export * from './src/state'
 
-export {
-    actions,
-    reducers
-}
+
+export default Container(Login);
+
+
+

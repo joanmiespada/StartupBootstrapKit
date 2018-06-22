@@ -1,8 +1,8 @@
 {
-  "name": "backoffice-login",
+  "name": "backoffice-core",
   "version": "1.0.0",
-  "description": "login operative",
-  "main": "./dist/backoffice.login.js",
+  "description": "common activities",
+  "main": "./dist/backoffice.core.js",
   "scripts": {
     "pretest": "eslint -c ../../.eslintrc ./src",
     "build:webpack": "NODE_ENV=development webpack --config ./webpack.config.js",
@@ -26,7 +26,6 @@
     "cssnano": "^3.10.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-react": "^1.1.7",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-import": "^2.11.0",
@@ -52,7 +51,6 @@
   },
   "peerDependencies": {
     "babel-polyfill": "^6.26.0",
-    "backoffice-core": "1.0.0",
     "cross-fetch": "^2.1.1",
     "localforage": "^1.7.1",
     "lodash": "^4.17.10",

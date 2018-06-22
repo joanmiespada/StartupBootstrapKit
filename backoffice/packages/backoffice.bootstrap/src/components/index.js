@@ -26,6 +26,7 @@ import CustomInput from "./CustomInput/CustomInput.jsx";
 // #############################
 
 import Footer from "./Footer/Footer.jsx";
+import SimpleFooter from "./Footer/SimpleFooter.jsx";
 
 // ##############################
 // // // Grid
@@ -94,6 +95,7 @@ export {
   CustomInput,
   // Footer
   Footer,
+  SimpleFooter,
   // Grid
   ItemGrid,
   // Header

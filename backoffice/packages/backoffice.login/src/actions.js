@@ -1,30 +1,33 @@
-import fetch from 'cross-fetch';
+import fetch from 'cross-fetch'
+import params from 'backoffice-core'
 
-export const LOGIN_REQUEST = 'LOGIN_REQUEST';
-export const LOGIN_RESPONSE = 'LOGIN_RESPONSE';
-export const LOGIN_FAIL = 'LOGIN_FAIL';
+import { 
+  LOGIN_REQUEST,
+  LOGIN_RESPONSE,
+  LOGIN_FAIL } from './types'
 
-const LoginOnRequest = (email, pass) => ({
-  type: 'LOGIN_REQUEST',
+export const LoginOnRequest = (email, pass) => ({
+  type: LOGIN_REQUEST,
   email,
   pass,
-});
+})
 
-const LoginOnReceived = (email, id, token) => ({
-  type: 'LOGIN_RESPONSE',
+export const LoginOnReceived = (email, id, token) => ({
+  type: LOGIN_RESPONSE,
   token,
   id,
   email,
-});
+})
 
-const LoginOnError = err => ({
-  type: 'LOGIN_FAIL',
+export const LoginOnError = err => ({
+  type: LOGIN_FAIL,
   error: err,
-});
+})
 
 export const login = (email, password) => (
   dispatch => new Promise((resolve, reject) => {
     dispatch(LoginOnRequest(email, password));
+    console.log(params)
     fetch('http://127.0.0.1:8080/v1/login/', {
       method: 'POST',
       headers: {
@@ -34,43 +37,42 @@ export const login = (email, password) => (
     })
       .then((res) => {
         if (res.ok === false) {
-          const answer = { status: res.status, statusText: res.statusText };
-          dispatch(LoginOnError(answer));
-          reject(answer);
+          const answer = { status: res.status, statusText: res.statusText }
+          dispatch(LoginOnError(answer))
+          reject(answer)
         }
-        return res.json();
+        return res.json()
       })
       .then((response) => {
         
         if (response == null) {
-          const err = 'No data received';
-          dispatch(LoginOnError(err));
-          reject(err);
+          const err = 'No data received'
+          dispatch(LoginOnError(err))
+          reject(err)
           return;
         }
 
         if(!response.result){
-          dispatch(LoginOnError( response.error ));
-          reject(response.error);
+          dispatch(LoginOnError( response.error ))
+          reject(response.error)
           return;
         }
 
         if(!response.data.login){
-          dispatch(LoginOnError( response.error ));
-          reject(response.error);
+          dispatch(LoginOnError( response.error ))
+          reject(response.error)
           return;
         }
 
-        dispatch(LoginOnReceived(email,response.data.id , response.data.token));
-        resolve(true);
+        dispatch(LoginOnReceived(email,response.data.id , response.data.token))
+        resolve(true)
          
         
       })
       .catch((err) => {
-        dispatch(LoginOnError(err));
-        reject(err);
+        dispatch(LoginOnError(err))
+        reject(err)
       });
   })
-);
+)
 
-export default login;

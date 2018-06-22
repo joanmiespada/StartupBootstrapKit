@@ -4,16 +4,18 @@ import {
   LOGIN_FAIL,
 } from './actions';
 
-const reducers = (state = [], action) => {
+import {state as initialState  } from './state'
+
+
+
+export const reducers = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
       return [
         ...state,
         {
           email: action.email,
-          loginSpining: true,
-          //token: undefined,
-          //loginTimeStamp: undefined,
+          loginSpining: true
         },
       ];
     case LOGIN_RESPONSE:
@@ -22,8 +24,8 @@ const reducers = (state = [], action) => {
         {
           email: action.email,
           loginSpining: false,
-          token: action.token,
-          userid: action.id,
+          apiToken: action.token,
+          userId: action.id,
           loginTimeStamp: Date.now(),
         },
       ];
@@ -31,10 +33,7 @@ const reducers = (state = [], action) => {
       return [
         ...state,
         {
-          //email: undefined,
           loginSpining: false,
-          //token: undefined,
-          //loginTimeStamp: undefined,
           error: action.error,
         },
       ];
@@ -42,4 +41,4 @@ const reducers = (state = [], action) => {
       return state;
   }
 };
-export default reducers;
+

@@ -22,6 +22,8 @@ function loadModules(folder)
 
 var modules = loadModules('../../node_modules');
 
+//console.log(modules)
+
 function getCommonConfiguration(filename,pathBase='./dist')
 { 
     
@@ -30,10 +32,10 @@ function getCommonConfiguration(filename,pathBase='./dist')
         entry: './index.js',
         resolve: {
             extensions: ['.js','.jsx','.json'],
-            modules: [
-                'node_modules',
-            ],
-            symlinks: false,
+            //modules: [
+            //    'node_modules',
+            //],
+            //symlinks: false,
         },
         output: {
             path: pathBase,
@@ -44,6 +46,12 @@ function getCommonConfiguration(filename,pathBase='./dist')
         module: {
             rules: [
                 {
+                    enforce: "pre",
+                    test: /\.jsx?$/,
+                    exclude: /node_modules/,
+                    loader: "eslint-loader",
+                },
+                {
                     test: /\.jsx?$/,
                     exclude: /(node_modules)/,
                     use: {
@@ -52,7 +60,7 @@ function getCommonConfiguration(filename,pathBase='./dist')
                 }
             ]
         },
-        devtool: isProduction ? 'source-map': 'cheap-module-eval-source-map',
+        devtool:'source-map', //isProduction ? 'source-map': 'cheap-module-eval-source-map',
         stats: {
             colors:true
         },

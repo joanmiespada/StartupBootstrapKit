@@ -5,7 +5,8 @@
   "main": "./dist/backoffice.users.js",
   "scripts": {
     "pretest": "eslint -c ../../.eslintrc ./src",
-    "build:webpack": "webpack --config ./webpack.config.js"
+    "build:webpack": "NODE_ENV=development webpack --config ./webpack.config.js",
+    "build:webpack:prod": "NODE_ENV=production webpack --config ./webpack.config.js"
   },
   "keywords": [],
   "author": "",
@@ -50,7 +51,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "cross-fetch": "^2.1.1",
+    "cross-fetch": "2.2.1",
     "localforage": "^1.7.1",
     "lodash": "^4.17.10",
     "material-ui": "1.0.0-beta.41",

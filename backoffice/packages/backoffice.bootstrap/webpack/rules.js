@@ -6,6 +6,12 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const rules = [
   {
+    enforce: "pre",
+    test: /\.jsx?$/,
+    exclude: /node_modules/,
+    loader: "eslint-loader",
+  },
+  {
     test: /\.(js|jsx|mjs)$/,
     exclude: /node_modules/,
     use:[

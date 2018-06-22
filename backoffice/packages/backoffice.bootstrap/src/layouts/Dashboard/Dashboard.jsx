@@ -6,7 +6,9 @@ import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { withStyles } from "material-ui";
 
-import { Header, Footer, Sidebar } from "components";
+import { Header, Sidebar, SimpleFooter } from "components";
+
+import Login  from 'backoffice-login';
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
@@ -14,6 +16,7 @@ import appStyle from "assets/jss/material-dashboard-react/appStyle.jsx";
 
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
+
 
 const switchRoutes = (
   <Switch>
@@ -27,13 +30,20 @@ const switchRoutes = (
 
 class App extends React.Component {
   state = {
-    mobileOpen: false
+    mobileOpen: false,
+    loginOpen: true
+  
   };
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
   getRoute() {
     return this.props.location.pathname !== "/maps";
+  }
+  showLogin()
+  {
+    console.log('changing state')
+    this.setState({ loginOpen: !this.state.loginOpen });
   }
   componentDidMount() {
     if(navigator.platform.indexOf('Win') > -1){
@@ -45,6 +55,7 @@ class App extends React.Component {
     this.refs.mainPanel.scrollTop = 0;
   }
   render() {
+    console.log(this.props)
     const { classes, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
@@ -64,6 +75,7 @@ class App extends React.Component {
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
+          <Login />  
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           {this.getRoute() ? (
             <div className={classes.content}>
@@ -72,8 +84,9 @@ class App extends React.Component {
           ) : (
             <div className={classes.map}>{switchRoutes}</div>
           )}
-          {this.getRoute() ? <Footer /> : null}
+          {this.getRoute() ? <SimpleFooter /> : null}
         </div>
+        
       </div>
     );
   }

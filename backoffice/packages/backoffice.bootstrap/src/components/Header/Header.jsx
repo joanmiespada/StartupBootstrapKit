@@ -13,7 +13,7 @@ import cx from "classnames";
 
 import headerStyle from "assets/jss/material-dashboard-react/headerStyle.jsx";
 
-import HeaderLinks from "./HeaderLinks";
+import SimpleHeaderLinks from "./SimpleHeaderLinks";
 
 function Header({ ...props }) {
   function makeBrand() {
@@ -40,7 +40,7 @@ function Header({ ...props }) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <HeaderLinks />
+          <SimpleHeaderLinks />
         </Hidden>
         <Hidden mdUp>
           <IconButton

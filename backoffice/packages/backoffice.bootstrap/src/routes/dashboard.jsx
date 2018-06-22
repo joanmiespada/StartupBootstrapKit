@@ -70,13 +70,28 @@ const dashboardRoutes = [
     component: NotificationsPage
   },*/
   {
-    path: "/emptyhome",
-    sidebarName: "Empty Home",
-    navbarName: "Empty Home",
+    path: "/welcome",
+    sidebarName: "Welcome",
+    navbarName: "Welcome",
     icon: Notifications,
     component: EmptyHomePage
   },
-  { redirect: true, path: "/", to: "/emptyhome", navbarName: "Redirect" }
+  {
+    path: "/todolists",
+    sidebarName: "TodoList Management",
+    navbarName: "TodosList Management",
+    icon: LibraryBooks,
+    component: EmptyHomePage
+  },
+  {
+    path: "/users",
+    sidebarName: "User Management",
+    navbarName: "User Management",
+    icon: Person,
+    component: EmptyHomePage
+  },
+  
+  { redirect: true, path: "/", to: "/welcome", navbarName: "Redirect" }
 ];
 
 export default dashboardRoutes;

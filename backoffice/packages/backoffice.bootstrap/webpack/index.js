@@ -25,11 +25,9 @@ const settings = {
   context: resolve(__dirname, '..'),
   entry: //'./src/index.js',
   {
-    app: [
-      './src/index.js',
-    ],
+    app: ['./src/index.js'],
     vendor,
-    depens: ['backoffice-users', 'backoffice-login' ]
+    //depens: ['backoffice-users', 'backoffice-login', 'backoffice-core' ]
   },
   output: {
     filename: '[name].[hash].js',

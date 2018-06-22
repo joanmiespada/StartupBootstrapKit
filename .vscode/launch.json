@@ -28,6 +28,16 @@
             "request": "attach",
             "name": "Attach by Process ID",
             "processId": "${command:PickProcess}"
+        },
+        {
+            "name": "Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceRoot}/src",
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
         }
     ]
 }

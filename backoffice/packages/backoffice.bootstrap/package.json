@@ -1,7 +1,7 @@
 {
   "name": "backoffice-bootstrap",
   "version": "1.0.0",
-  "description": "BackOffice sourced by Material Dashboard React - Coded by Creative Tim",
+  "description": "BackOffice imported from Material Dashboard React and split in several packages",
   "private": true,
   "main": "./src/index.js",
   "devDependencies": {
@@ -46,12 +46,15 @@
     "workbox-webpack-plugin": "^3.2.0"
   },
   "dependencies": {
+    "@material-ui/core": "^1.2.3",
     "@material-ui/icons": "1.0.0-beta.42",
     "babel-polyfill": "^6.26.0",
+    "backoffice-core": "1.0.0",
     "backoffice-login": "1.0.0",
     "backoffice-users": "1.0.0",
     "chartist": "^0.11.0",
     "classnames": "^2.2.5",
+    "cross-fetch": "^2.2.1",
     "lodash": "^4.17.10",
     "material-ui": "1.0.0-beta.41",
     "moment": "^2.22.2",
@@ -70,24 +73,21 @@
     "react-swipeable-views": "^0.12.13",
     "react-virtualized": "^9.19.1",
     "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
     "redux-observable": "^0.18.0",
     "rxjs": "^6.2.0",
     "whatwg-fetch": "^2.0.4"
   },
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --config ./webpack/index.js",
-    "build": "NODE_ENV=development webpack --config ./webpack/index.js",
-    "test": ""
+    "build:webpack": "NODE_ENV=development webpack --config ./webpack/index.js",
+    "build:webpack:prod": "NODE_ENV=production webpack --config ./webpack/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"
+    "url": ""
   },
   "keywords": [],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
-  },
-  "homepage": "https://creativetimofficial.github.io/material-dashboard-react/#/dashboard"
+  "author": "joanmiespada",
+  "license": "MIT"
 }

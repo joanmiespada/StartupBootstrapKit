@@ -14,6 +14,8 @@ import {
 
 import { HeaderLinks } from "components";
 
+import {webparams} from '../../conf'
+
 import sidebarStyle from "assets/jss/material-dashboard-react/sidebarStyle.jsx";
 
 const Sidebar = ({ ...props }) => {
@@ -56,7 +58,7 @@ const Sidebar = ({ ...props }) => {
   );
   var brand = (
     <div className={classes.logo}>
-      <a href="https://www.creative-tim.com" className={classes.logoLink}>
+      <a href={webparams.development.URL } className={classes.logoLink}>
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
         </div>
