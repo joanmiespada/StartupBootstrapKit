@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-
+import DevTools from '../../conf/DevTools';
 
 export const CombineReducers = (obj) =>
 {
@@ -10,12 +11,22 @@ export const CombineReducers = (obj) =>
 
 export const CreateAppStore = (rootReducers)=>{
 
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
     const store = createStore(
         rootReducers,
-        //compose(
-        //    applyMiddleware(thunk)
-       // )
+        composeEnhancers(
+            applyMiddleware(thunk,logger),
+            //DevTools.instrument()
+        )
     );
+    console.log(store)
+    if (module.hot) {
+        // Enable Webpack hot module replacement for reducers
+        module.hot.accept('../reducers', () => {
+          store.replaceReducer(rootReducer)
+        })
+      }
 
     return store;
 
