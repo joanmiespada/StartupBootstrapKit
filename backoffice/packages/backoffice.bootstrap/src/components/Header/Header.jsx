@@ -13,7 +13,7 @@ import cx from "classnames";
 
 import headerStyle from "assets/jss/material-dashboard-react/headerStyle.jsx";
 
-import SimpleHeaderLinks from "./SimpleHeaderLinks";
+import SimpleHeaderLinks from "./SimpleHeaderLinks.js";
 
 function Header({ ...props }) {
   function makeBrand() {

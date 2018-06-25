@@ -1,6 +1,6 @@
 
 export const state = {
-    empty:true
+    loginShowed:false
  }
 
 export const stateKey = 'dashboard'

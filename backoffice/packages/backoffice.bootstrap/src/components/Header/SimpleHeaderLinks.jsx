@@ -18,14 +18,18 @@ import { CustomInput, IconButton as SearchButton } from "components";
 import headerLinksStyle from "assets/jss/material-dashboard-react/headerLinksStyle";
 
 class SimpleHeaderLinks extends React.Component {
-  //state = {
-  //  open: false
-  //};
+  
   handleClick = () => {
-    //this.setState({ open: !this.state.open });
+    console.log('asdasdadasd')
+
+    console.log(this.props)
+
+    this.props.methods.LoginOnOpen()
+    
   };
   
   render() {
+
     const { classes } = this.props;
     //const { open } = this.state;
     return (
