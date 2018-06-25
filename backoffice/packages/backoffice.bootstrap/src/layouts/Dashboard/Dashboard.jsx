@@ -28,7 +28,7 @@ const switchRoutes = (
   </Switch>
 );
 
-class App extends React.Component {
+class Dashboard extends React.Component {
   state = {
     mobileOpen: false,
     loginOpen: true
@@ -92,8 +92,8 @@ class App extends React.Component {
   }
 }
 
-App.propTypes = {
+Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(appStyle)(App);
+export default withStyles(appStyle)(Dashboard);
