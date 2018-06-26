@@ -42,7 +42,10 @@ class Login extends React.Component {
     console.log('s111111111')
   }
   handleClose = () => {
-    console.log('s2222222222')
+    //console.log('s2222222222')
+    //const aux = this.props
+    console.log(this.props)
+    this.props.onClose();
   }
 
   render() {
@@ -71,8 +74,9 @@ class Login extends React.Component {
       },
       { label: 'Close', onClick: this.props.handleToggle },
     ];*/
-    const showed = this.props.state.showed
-    //console.log(aux)
+    const {render} = this.props
+    //const showed = false; // this.props.state.showed
+    
     //let compo = undefined
     //if(!showed)
     //  compo = null
@@ -81,7 +85,7 @@ class Login extends React.Component {
     return (
       <div>
           <Dialog
-          open={showed}
+          open={render}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >

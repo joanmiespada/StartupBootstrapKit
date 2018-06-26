@@ -9,19 +9,19 @@ import * as _login from 'backoffice-login';
 import "assets/css/material-dashboard-react.css?v=1.2.0";
 
 import indexRoutes from "routes/index.jsx";
-import {store as DashboardStore} from 'stateManagement' //'./stateManagement/store';
+import {store as DashboardStore} from 'stateManagement';
 import {reducers as DashboardReducers} from 'stateManagement';
 import {state as DashboardState} from 'stateManagement';
 
 const hist = createBrowserHistory();
 
-const globalState = {}
-globalState[_login.stateKey] = _login.reducers
-globalState[DashboardState.stateKey] = DashboardReducers
-globalState['others'] = {a:1}
+const globalReducers = {};
+globalReducers[_login.stateKey] = _login.reducers
+globalReducers[DashboardState.stateKey] = DashboardReducers.reducers
+
 
 const storeApp = DashboardStore.CreateAppStore(  
-                    DashboardStore.CombineReducers(globalState) );
+                    DashboardStore.CombineReducers(globalReducers) );
 
 ReactDOM.render(
   <Provider store={storeApp}>

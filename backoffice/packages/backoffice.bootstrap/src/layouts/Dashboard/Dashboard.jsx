@@ -31,20 +31,20 @@ const switchRoutes = (
 class Dashboard extends React.Component {
   state = {
     mobileOpen: false,
-    loginOpen: true
-  
   };
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
+  hideLogin = () =>
+  {
+    
+    const { methods } = this.props;
+    methods.LoginOnClose()
+  }
   getRoute() {
     return this.props.location.pathname !== "/maps";
   }
-  showLogin()
-  {
-    console.log('changing state')
-    this.setState({ loginOpen: !this.state.loginOpen });
-  }
+  
   componentDidMount() {
     if(navigator.platform.indexOf('Win') > -1){
       // eslint-disable-next-line
@@ -56,6 +56,9 @@ class Dashboard extends React.Component {
   }
   render() {
     
+    const dashboard = this.props.state.dashboard
+    console.log(dashboard)
+
     const { classes, ...rest } = this.props;
     return (
       <div className={classes.wrapper}>
@@ -75,7 +78,7 @@ class Dashboard extends React.Component {
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />
-          <Login />  
+          <Login render={dashboard.loginShowed} onClose={this.hideLogin} />  
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           {this.getRoute() ? (
             <div className={classes.content}>

@@ -1,7 +1,6 @@
 
 
 export const state = {
-    showed: false,
     email: undefined,
     userId: undefined,
     apiToken: undefined,

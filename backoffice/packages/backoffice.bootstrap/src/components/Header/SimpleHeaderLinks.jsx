@@ -20,12 +20,8 @@ import headerLinksStyle from "assets/jss/material-dashboard-react/headerLinksSty
 class SimpleHeaderLinks extends React.Component {
   
   handleClick = () => {
-    console.log('asdasdadasd')
-
-    console.log(this.props)
-
-    this.props.methods.LoginOnOpen()
-    
+    const { methods } = this.props;
+    methods.LoginOnOpen()
   };
   
   render() {

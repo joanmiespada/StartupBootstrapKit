@@ -2,10 +2,15 @@ import { connect } from 'react-redux';
 import {actions} from 'stateManagement';
 import SimpleHeaderLinks from './SimpleHeaderLinks.jsx'
 
-const mapDispatchToProps = () => { return { methods: Object.assign({},actions )  } };
+const mapDispatchToProps = (dispatch) => { 
+   return {
+       methods:{
+        LoginOnOpen: ()=> dispatch(actions.LoginOnOpen() ),
+       // LoginOnClose: () => dispatch(actions.LoginOnClose())
+       }
+   }
+};
 
 const mapStateToProps = (state) => { return { state: state.login } };
 
-const container = connect(mapStateToProps, mapDispatchToProps);
-
-export default container(SimpleHeaderLinks)
+export default connect(mapStateToProps, mapDispatchToProps)(SimpleHeaderLinks); 

@@ -3,8 +3,8 @@ import {
     LOGIN_CLOSE
 } from '../types'
   
-export const LoginOnOpen = () => ({
-    type: LOGIN_OPEN
+export const LoginOnOpen = () =>  ({
+        type: LOGIN_OPEN
 })
 
 export const LoginOnClose = () => ({
