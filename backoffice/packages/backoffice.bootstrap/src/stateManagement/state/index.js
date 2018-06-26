@@ -1,6 +1,5 @@
+import * as login from './login'
 
-export const state = {
-    loginShowed:false
- }
-
-export const stateKey = 'dashboard'
+export {
+    login
+}

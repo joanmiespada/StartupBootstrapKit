@@ -9,4 +9,4 @@ export const state = {
     error: undefined
 }
 
-export const stateKey = 'login'
+export const stateKey = 'login-package'

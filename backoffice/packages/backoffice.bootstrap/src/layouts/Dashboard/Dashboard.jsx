@@ -9,6 +9,7 @@ import { withStyles } from "material-ui";
 import { Header, Sidebar, SimpleFooter } from "components";
 
 import Login  from 'backoffice-login';
+import {state as DashboardState} from 'stateManagement';
 
 import dashboardRoutes from "routes/dashboard.jsx";
 
@@ -56,8 +57,8 @@ class Dashboard extends React.Component {
   }
   render() {
     
-    const dashboard = this.props.state.dashboard
-    console.log(dashboard)
+    const dashboard = this.props.state[DashboardState.login.stateKey]
+    //console.log(this.props)
 
     const { classes, ...rest } = this.props;
     return (

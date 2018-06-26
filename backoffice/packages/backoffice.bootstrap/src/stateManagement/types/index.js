@@ -1,2 +1,5 @@
-export const LOGIN_OPEN = '@@DASHBOARD/LOGIN_OPEN';
-export const LOGIN_CLOSE = '@@DASHBOARD/LOGIN_CLOSE';
+import * as login from './login'
+
+export {
+    login
+}

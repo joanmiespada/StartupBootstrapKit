@@ -5,8 +5,8 @@ import SimpleHeaderLinks from './SimpleHeaderLinks.jsx'
 const mapDispatchToProps = (dispatch) => { 
    return {
        methods:{
-        LoginOnOpen: ()=> dispatch(actions.LoginOnOpen() ),
-       // LoginOnClose: () => dispatch(actions.LoginOnClose())
+        LoginOnOpen: ()=> dispatch(actions.login.LoginOnOpen() ),
+       // LoginOnClose: () => dispatch(actions.login.LoginOnClose())
        }
    }
 };
