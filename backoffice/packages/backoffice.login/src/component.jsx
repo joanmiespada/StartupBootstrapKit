@@ -1,7 +1,5 @@
 import React from 'react';
-//import { connect } from 'react-redux';
-//import { Dialog, Input, ProgressBar } from 'react-toolbox';
-//import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 //import { login } from './actions';
 
 import Button from '@material-ui/core/Button';
@@ -42,9 +40,7 @@ class Login extends React.Component {
     console.log('s111111111')
   }
   handleClose = () => {
-    //console.log('s2222222222')
-    //const aux = this.props
-    console.log(this.props)
+    
     this.props.onClose();
   }
 
@@ -123,9 +119,10 @@ class Login extends React.Component {
   }
 }
 
-/*Login.propTypes = {
-  handleClose: PropTypes.func.isRequired
-};*/
+Login.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  render: PropTypes.bool.isRequired,
+};
 
 
 export default Login

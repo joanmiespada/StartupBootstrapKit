@@ -17,9 +17,8 @@ const hist = createBrowserHistory();
 
 const globalReducers = {};
 globalReducers[_login.stateKey] = _login.reducers
-//globalReducers[DashboardReducers.stateKey] = DashboardReducers.getAllReducers()  //DashboardReducers.login.reducers
 globalReducers[DashboardState.login.stateKey] = DashboardReducers.login.reducers
-console.log(globalReducers)
+
 
 const storeApp = DashboardStore.CreateAppStore(  
                     DashboardStore.CombineReducers(globalReducers) );

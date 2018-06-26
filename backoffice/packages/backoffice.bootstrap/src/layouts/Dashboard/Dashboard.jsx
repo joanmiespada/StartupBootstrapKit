@@ -38,7 +38,6 @@ class Dashboard extends React.Component {
   };
   hideLogin = () =>
   {
-    
     const { methods } = this.props;
     methods.LoginOnClose()
   }
