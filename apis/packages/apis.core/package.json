@@ -45,6 +45,7 @@
     "immutable": "^3.8.2",
     "jsonwebtoken": "^8.2.1",
     "log4js": "^2.5.3",
+    "minimist": "^1.2.0",
     "mongodb": "^3.0.10"
   }
 }

@@ -1,5 +1,3 @@
-import fetch from 'cross-fetch'
-import params from 'backoffice-core'
 
 import { 
   LOGIN_REQUEST,

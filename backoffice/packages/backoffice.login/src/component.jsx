@@ -1,52 +1,74 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import { login } from './actions';
-
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import DialogContentText from '@material-ui/core/DialogContentText';
+//import CircularProgress from '@material-ui/core/CircularProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
 //import withMobileDialog from '@material-ui/core/withMobileDialog';
 
+import {style} from "./style.jsx";
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-  }
-/*
-  handleChange = name => (value) => {
-    this.setState({ ...this.state, [name]: value }, () => {
-      const validate = (email) => {
-        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;  //eslint-disable-line no-useless-escape
-        return re.test(email);
-      };
-      const valid = (validate(this.state.email) && this.state.passw.length > 0) ? true : false;
-      this.setState({ ...this.state, formValid: valid });
-    });
+
+    if(!isProduction)
+      this.state = {
+        email:'ocrat@mafcusi.af',
+        passw:'pepe'
+      }
+    else
+      this.state = {
+        email:'',
+        passw:''
+      }
   }
 
-  login = () => {
-    this.props.loginMethod(this.state.email, this.state.passw)
-      .then((res) => {
-        if (res) this.props.handleToggle();
-      })
-      .catch((err) => { alert(err); });
-  }
-*/
   handleLogin = () => {
-    console.log('s111111111')
+    
+    this.props.Login(this.state.email,this.state.passw).then((loginOk)=>{
+        if(loginOk)
+          this.props.onClose();
+      }).catch(err=> console.log(err) )
+
   }
   handleClose = () => {
     
-    this.props.onClose();
+    const {state} = this.props
+    
+    if(!state.loginSpining)
+        this.props.onClose();
+  }
+
+  bindModel = (context)=> {
+    return (key) => {
+      return { 
+        value: context.state[key],
+          
+        onChange(event) {
+          const newValue = {}
+          newValue[key]= event.target.value
+          context.setState( Object.assign({},this.state,newValue) )
+          
+        }
+      };
+    }
   }
 
   render() {
-    const errorMessage = [];
-    const red = { color: 'red' };
+    //const errorMessage = [];
+    //const red = { color: 'red' };
+    const model = this.bindModel(this);
+
+    
 
     /*if (this.state.formErrors.email !== undefined) {
       errorMessage.push((<span style={red}>{this.state.formErrors.email} </span>));
@@ -55,29 +77,13 @@ class Login extends React.Component {
       errorMessage.push((<span style={red}> {this.state.formErrors.email} </span>));
     }*/
 
-    /*let progressbar = null;
-    if (this.props.isFetching) {
-      progressbar = (<ProgressBar type="circular" mode="indeterminate" multicolor />);
-    }*/
+        
+    const {render,state,classes} = this.props
+    
+    const errsToShow = state.error !== undefined ?  (<DialogContentText className={classes.red}>{state.error}</DialogContentText>): null
+    //const spin = state.loginSpining === true ?  (<CircularProgress className={classes.progress} size={50} color="secondary"/>) : null
+    const spin = state.loginSpining === true ?  (<div className={classes.root}><LinearProgress /></div>) : null
 
-    /*const actions = [
-      {
-        label: 'Login',
-        disabled: !this.state.formValid,
-        raised: true,
-        primary: true,
-        onClick: this.login,
-      },
-      { label: 'Close', onClick: this.props.handleToggle },
-    ];*/
-    const {render} = this.props
-    //const showed = false; // this.props.state.showed
-    
-    //let compo = undefined
-    //if(!showed)
-    //  compo = null
-    //else
-    
     return (
       <div>
           <Dialog
@@ -94,25 +100,31 @@ class Login extends React.Component {
               label="Email Address"
               type="email"
               fullWidth
+              {...model('email')}
             />
             <TextField
-              autoFocus
+              
               margin="dense"
               id="password"
               label="Password"
               type="password"
               fullWidth
+              {...model('passw')}
             />
+            {errsToShow}
+            {spin}
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleClose} color="primary"
+              disabled={state.loginSpining } >
               Cancel
             </Button>
-            <Button onClick={this.handleLogin} color="primary">
+            <Button onClick={this.handleLogin} color="primary"
+              disabled={state.loginSpining }>
               Login
             </Button>
           </DialogActions>
-          {errorMessage}
+          
         </Dialog>
       </div>
       );
@@ -125,7 +137,8 @@ Login.propTypes = {
 };
 
 
-export default Login
+
+export default withStyles(style)(Login)
 //export default withMobileDialog(Login)
 
 /*

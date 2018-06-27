@@ -11,6 +11,23 @@ export class loginLogic
         this.userdata = dataaccess
     }
 
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    loginErr()
+    {
+        return new Promise(async (resolve) => {
+
+            await this.sleep(2000)
+            resolve( _u.jsonOK( {login:false, 
+                message: messages.errNotUserFoundByEmail,
+                code: errCodes.errNotUserFoundByEmail
+             },{login:'bool', message:'string', code:'number' } )) 
+
+        })
+    }
+
     login(email, password)
     {
         return new Promise( (resolve,reject) => {
@@ -34,7 +51,10 @@ export class loginLogic
                         resolve(  _u.jsonOK( {login:true, token:token, id:result.id }, {login:'bool', token:'string', id:'uuid'} ) )
                     }
                 else
-                    resolve( _u.jsonOK( {login:false, message: messages.errNotUserFoundByEmail },{login:'bool', message:'string'} )) 
+                    resolve( _u.jsonOK( {login:false, 
+                                        message: messages.errNotUserFoundByEmail,
+                                        code: errCodes.errNotUserFoundByEmail
+                                     },{login:'bool', message:'string', code:'number' } )) 
             }).catch(err=>reject(err))
         })  
     }

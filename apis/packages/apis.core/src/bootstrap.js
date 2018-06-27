@@ -9,25 +9,52 @@ import helmet from 'helmet'
 import compression from 'compression'
 import cluster from 'cluster'
 import os from 'os'
+import minimist from 'minimist'
 
 import {logsys as logger, firebase, mongodb } from 'apis-core'
 import {shutdown} from 'apis-core'
 
 const isProduction = process.env.NODE_ENV === 'production'
-const isTravis = process.env.TRAVIS === true
 
-export const bootstrap = (config) =>
+const setupStorage = (argv) =>{
+    let storage = undefined
+
+    if(argv.storage ==='firebase')
+        storage = new firebase();
+    else if(argv.storage ==='mongodb' )
+        storage = new mongodb(); 
+    else{
+        const aux = `Master ${process.pid}: storage loaded by default: mongodb` 
+        console.log(aux)//eslint-disable-line
+        logger.app.info(aux)
+        storage = new mongodb();
+    }
+            
+    storage.start()
+
+    return storage
+
+}
+
+const welcomeMessage =(config)=>{
+    const message = `Boostraping microservice ${config.description} with env: ${process.env.NODE_ENV}`
+    logger.app.info(message)
+    console.log(message) //eslint-disable-line
+}
+
+export const bootstrap = (config, commandLineParams) =>
 {
+    var argv = minimist(commandLineParams.slice(2));
+
     if(process.env.ENVFILE)
     {
         const aux = path.join(__dirname,process.env.ENVFILE) 
         dotenv.config({ path: aux })
     }
-    const message = `Boostraping microservice ${config.description} with env: ${process.env.NODE_ENV}`
-    logger.app.info(message)
-    console.log(message) //eslint-disable-line
+    
+    welcomeMessage(config)
 
-    let storage = undefined;
+    const storage = setupStorage(argv)
 
     if( cluster.isMaster && isProduction ) {
 
@@ -39,13 +66,6 @@ export const bootstrap = (config) =>
         for (let i = 0; i < numCpus; i++) {
             cluster.fork();
         }
-
-        if(isTravis)
-            storage = new firebase();
-        else
-            storage = new mongodb();   
-        
-        storage.start()
 
         cluster.on('exit', (worker) => {
             const aux = `Process ${worker.process.pid} died`
