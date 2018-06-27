@@ -30,10 +30,10 @@ Storage: we are using Google Firebase.
 | Solution | Description    |
 |----------|----------------|
 |[API - Microservices](./apis) | Back-end infrastructure such as REST api, microservices, storage, etcetera.  |
-|[BackOffice](./backoffice) | Front-end for internal use: manage users or other business' tasks performed by organization's people |  
+|[BackOffice](./backoffice) | Front-end for internal use: manage users or other business' tasks performed by organization's people.![Alt text](img/backoffice.png?raw=true "BackOffice") |  
 |FrontOffice | Under construction. All activities for the final user or customer | 
 
-![Alt text](img/backoffice.png?raw=true "BackOffice")
+
 
 
 ### How you can start?
