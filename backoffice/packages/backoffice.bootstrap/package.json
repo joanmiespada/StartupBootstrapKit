@@ -1,7 +1,7 @@
 {
   "name": "backoffice-bootstrap",
   "version": "1.0.0",
-  "description": "BackOffice imported from Material Dashboard React and split in several packages",
+  "description": "BackOffice imported from Material-ui Dashboard React and split in several packages (creative-tim.com)",
   "private": true,
   "main": "./src/index.js",
   "devDependencies": {

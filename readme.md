@@ -33,6 +33,9 @@ Storage: we are using Google Firebase.
 |[BackOffice](./backoffice) | Front-end for internal use: manage users or other business' tasks performed by organization's people |  
 |FrontOffice | Under construction. All activities for the final user or customer | 
 
+![Alt text](img/backoffice.png?raw=true "BackOffice")
+
+
 ### How you can start?
 
 Clone this repo locally or fork it. 

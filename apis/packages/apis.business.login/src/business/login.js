@@ -15,6 +15,7 @@ export class loginLogic
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    //Just for test
     loginErr()
     {
         return new Promise(async (resolve) => {

@@ -7,6 +7,7 @@ import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 
 import EmptyHomePage from "views/Dashboard/EmptyHome.jsx"
+import UsersHomePage from "views/Dashboard/Users.jsx"
 
 import {
   Dashboard,
@@ -19,14 +20,14 @@ import {
 } from "@material-ui/icons";
 
 const dashboardRoutes = [
-  /*
+  
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
     navbarName: "Material Dashboard",
     icon: Dashboard,
     component: DashboardPage
-  },
+  },/*
   {
     path: "/user",
     sidebarName: "User Profile",
@@ -88,7 +89,7 @@ const dashboardRoutes = [
     sidebarName: "User Management",
     navbarName: "User Management",
     icon: Person,
-    component: EmptyHomePage
+    component: UsersHomePage
   },
   
   { redirect: true, path: "/", to: "/welcome", navbarName: "Redirect" }
