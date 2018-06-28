@@ -27,7 +27,6 @@ Storage: we are using Google Firebase or MongoDB.
 
 ### Layers
 
-[Alt text](img/layers.svg?raw=true "System layers")
 ![Alt text](https://raw.github.com/joanmiespada/StartupBootstrapKit/develop/img/layers.svg?sanitize=true)
 
 ### Explore the repo
