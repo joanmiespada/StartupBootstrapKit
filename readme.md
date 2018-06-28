@@ -28,6 +28,7 @@ Storage: we are using Google Firebase or MongoDB.
 ### Layers
 
 [Alt text](img/layers.svg?raw=true "System layers")
+![Alt text](https://raw.github.com/joanmiespada/StartupBootstrapKit/develop/img/layers.svg?sanitize=true)
 
 ### Explore the repo
 
@@ -36,9 +37,6 @@ Storage: we are using Google Firebase or MongoDB.
 |[API - Microservices](./apis) | Back-end infrastructure such as REST api, microservices, storage, etcetera.  |
 |[BackOffice](./backoffice) | Front-end for internal use: manage users or other business' tasks performed by organization's people.![Alt text](img/backoffice.png?raw=true "BackOffice") |  
 |FrontOffice | Under construction. All activities for the final user or customer | 
-
-
-
 
 ### How you can start?
 
