@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
-import * as actions from './actions';
-import {stateKey} from './state';
-import {login} from './api'
+import {stateKey} from '../stateManagement/state';
+import {login} from '../api'
 
 const mapDispatchToProps = (dispatch) => { 
     return {

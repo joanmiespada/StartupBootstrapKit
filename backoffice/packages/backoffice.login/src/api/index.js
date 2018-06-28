@@ -1,7 +1,7 @@
 import fetch from 'cross-fetch'
 import {params} from 'backoffice-core'
 
-import {LoginOnRequest, LoginOnError, LoginOnReceived  } from './actions'
+import {LoginOnRequest, LoginOnError, LoginOnReceived  } from '../stateManagement/actions'
 
 
 export const login = (email, password) => (

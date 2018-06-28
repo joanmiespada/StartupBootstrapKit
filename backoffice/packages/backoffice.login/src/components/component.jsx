@@ -12,7 +12,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import LinearProgress from '@material-ui/core/LinearProgress';
 //import withMobileDialog from '@material-ui/core/withMobileDialog';
 
-import {style} from "./style.jsx";
+import {style} from '../assets/style.jsx';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
