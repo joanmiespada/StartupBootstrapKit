@@ -23,7 +23,11 @@ This repo has been designed bear in mind these two points.
 Our objective is use cutting-edge technologies in order to be updated when our solutions runs in production. 
 In Back-end side, we are using: nodejs, babel, jest, express, webpack, lerna, etcetera. In Front-end side, React, redux, webpack, lerna, babel, etcetera. 
 
-Storage: we are using Google Firebase.  
+Storage: we are using Google Firebase or MongoDB.
+
+### Layers
+
+[Alt text](img/layers.svg?raw=true "System layers")
 
 ### Explore the repo
 
