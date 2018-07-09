@@ -9,4 +9,7 @@ bootstrap({
   version:'/v1',
   logic: obj,
   description: 'login',
+  db:{
+    storage:'firebase'
+  }
 }, process.argv)
