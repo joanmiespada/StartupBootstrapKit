@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3'
 
 services:
 
@@ -79,3 +79,25 @@ networks:
 #docker rmi $(docker images -q)
 
 #docker exec -i -t b2346ce35464 /bin/bash
+
+#deploy on Google Cloud Platform using Kubernetes
+#gcloud components install kubectl
+#gcloud auth configure-docker
+#export PROJECT_ID="$(gcloud config get-value project -q)"
+#docker build -t eu.gcr.io/${PROJECT_ID}/loginapi:v1 .
+#gcloud docker -- push eu.gcr.io/${PROJECT_ID}/loginapi:v1
+#glcoud compute zones list <choose zone>
+#gcloud container clusters create pmpempowered-cluster --num-nodes=3 --zone=europe-west3-a
+#gcloud compute instances list
+#kubectl run pmp-apis --image=eu.gcr.io/${PROJECT_ID}/loginapi:v1 --port 5080
+#kubectl get pods
+#kubectl expose deployment pmp-apis --type=LoadBalancer --port 80 --target-port 5080
+#kubectl get service
+#kubectl get deployment pmp-apis
+# after upload a new image in the repository
+#kubectl set image deployment/pmp-apis pmp-apis=eu.gcr.io/${PROJECT_ID}/loginapi:v2
+#remove kluster
+#kubectl delete service pmp-apis
+#gcloud compute forwarding-rules list #check loadbalancer is deleted too
+#gcloud container clusters delete pmpempowered-cluster --zone=europe-west3-a
+#kompose convert 

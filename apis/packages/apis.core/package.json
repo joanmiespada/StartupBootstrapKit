@@ -37,7 +37,7 @@
     "build-prod": "echo --noBuildProd--",
     "serve-prod": "echo --noServeProd--"
   },
-  "dependencies": {
+  "peerDependencies": {
     "bcrypt": "^2.0.1",
     "cors": "^2.8.4",
     "crypto-js": "^3.1.9-1",
