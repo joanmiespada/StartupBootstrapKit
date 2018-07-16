@@ -5,6 +5,8 @@
 | ----------|-------------| 
 |[![Build Status](https://travis-ci.org/joanmiespada/StartupBootstrapKit.svg?branch=production)](https://travis-ci.org/joanmiespada/StartupBootstrapKit) | [![Build Status](https://travis-ci.org/joanmiespada/StartupBootstrapKit.svg?branch=develop)](https://travis-ci.org/joanmiespada/StartupBootstrapKit)  |
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/15a2205d3ea6483ea0fd204424c4ddfa)](https://www.codacy.com/app/joanmiespada/StartupBootstrapKit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=joanmiespada/StartupBootstrapKit&amp;utm_campaign=Badge_Grade)
+
 
 ### What is Startup Bootstrap Kit (SBK)?
 
