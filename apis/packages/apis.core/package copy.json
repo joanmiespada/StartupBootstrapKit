@@ -36,16 +36,17 @@
     "build-dev": "echo  --noBuildDev--",
     "build-prod": "echo --noBuildProd--",
     "serve-prod": "echo --noServeProd--"
-  },
-  "peerDependencies": {
-    "bcrypt": "3.0.7",
-    "cors": "2.8.5",
-    "crypto-js": "^3.1.9-1",
-    "dotenv": "^5.0.1",
-    "immutable": "^3.8.2",
-    "jsonwebtoken": "^8.2.1",
-    "log4js": "^2.5.3",
-    "minimist": "^1.2.0",
-    "mongodb": "^3.0.10"
   }
+   //"peerDependencies": {
+  //  "bcrypt": "^2.0.1",
+  //  "cors": "^2.8.4",
+  //  "crypto-js": "^3.1.9-1",
+  //  "dotenv": "^5.0.1",
+  //  "immutable": "^3.8.2",
+  //  "jsonwebtoken": "^8.2.1",
+  //  "log4js": "^2.5.3",
+  //  "minimist": "^1.2.0",
+  //  "mongodb": "^3.0.10"
+  //}
+  
 }
