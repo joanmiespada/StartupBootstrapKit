@@ -7,14 +7,14 @@
 		"packages/*"
 	],
 	"scripts": {
-		"pretest": "lerna exec --parallel -- yarn pretest",
+		"pretest": "lerna exec --parallel -- npm run pretest",
 		"bootstrap": "lerna bootstrap",
-		"test": "lerna exec --parallel -- yarn test",
-		"test-easy": "lerna exec --parallel -- yarn test-easy",
-		"nodemon": "lerna exec --parallel -- yarn nodemon",
-		"start": "lerna exec --parallel -- yarn start",
-		"build-dev": "lerna exec --parallel -- yarn build-dev",
-		"build-prod": "lerna exec --parallel -- yarn build-prod",
-		"serve-prod": "lerna exec --parallel -- yarn serve-prod"
+		"test": "lerna exec --parallel -- npm run test",
+		"test-easy": "lerna exec --parallel -- npm run test-easy",
+		"nodemon": "lerna exec --parallel -- npm run nodemon",
+		"start": "lerna exec --parallel -- npm run start",
+		"build-dev": "lerna exec --parallel -- npm run build-dev",
+		"build-prod": "lerna exec --parallel -- npm run build-prod",
+		"serve-prod": "lerna exec --parallel -- npm run serve-prod"
 	}
 }
