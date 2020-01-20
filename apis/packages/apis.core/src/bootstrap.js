@@ -8,7 +8,7 @@ import {setupStorage} from './storage_providers/setup'
 import {startup} from './rest'
 import * as logger from './logsys'
 
-import {shutdown} from 'apis-core'
+import {gracefulShutdown} from './shutdown'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -77,8 +77,9 @@ export const bootstrap = (config, commandLineParams) =>
 
         }
 
-        process.on ('SIGTERM', shutdown.gracefulShutdown(server,closeServer))
-        process.on ('SIGINT',  shutdown.gracefulShutdown(server,closeServer))
+
+        process.on ('SIGTERM', gracefulShutdown(server,closeServer))
+        process.on ('SIGINT',  gracefulShutdown(server,closeServer))
 
     }
 

@@ -10,6 +10,7 @@ bootstrap({
   logic: obj,
   description: 'login',
   db:{
-    storage:'firebase'
+    //storage:'firebase'
+    storage:'mongodb'
   }
 }, process.argv)

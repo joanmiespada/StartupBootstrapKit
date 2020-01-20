@@ -7,7 +7,8 @@ export const setupStorage = (argv) =>{
     let storage = undefined
 
     if(argv.storage ==='firebase')
-        storage = new firebase();
+        //storage = new firebase();
+        throw new Error('not implemented')
     else if(argv.storage ==='mongodb' )
         storage = new mongodb(); 
     else{

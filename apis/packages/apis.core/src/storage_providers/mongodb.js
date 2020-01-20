@@ -58,7 +58,10 @@ export class mongodb extends storage
                     //const url = `mongodb://${params.mongo.user}:${params.mongo.pass}@${params.mongo.host}:${params.mongo.port}/${params.mongo.path}`
                     const url = `mongodb://${params.mongo.host}:${params.mongo.port}`
 
-                    this._client = await mongo.MongoClient.connect(url)    
+                    this._client = await mongo.MongoClient.connect(url, {
+                        useNewUrlParser: true,
+                        useUnifiedTopology: true
+                      })    
                     this._db = await this._client.db(params.mongo.database)
                 
                 }else{
