@@ -18,7 +18,7 @@ class loginapi
         let business = businessLogic
         return (req,res) =>
         {
-                //console.log(req.body)
+                console.log(req.body)
                 business.login(req.body.email,req.body.password )
                     .then((opResult)=>{
 

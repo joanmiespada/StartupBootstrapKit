@@ -10,7 +10,7 @@ export class loginData extends data
 
     login(email,passwordPlain)
     {
-        return new Promise( async (resolve, reject) => {
+        return new Promise( (resolve, reject) => {
             
             if(this.storage.db === undefined){
                 reject( _u.jsonError(keys.errServerDataIsUnavailable))

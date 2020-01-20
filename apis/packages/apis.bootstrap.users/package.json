@@ -11,6 +11,7 @@
     "@babel/core": "^7.8.3",
     "@babel/node": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
+    "babel-eslint": "^10.0.3",
     "chance": "^1.1.4",
     "cofeescript": "^0.0.1-security",
     "eslint": "^6.8.0",

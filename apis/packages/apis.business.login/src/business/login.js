@@ -18,9 +18,9 @@ export class loginLogic
     //Just for test
     loginErr()
     {
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
 
-            await this.sleep(2000)
+            //await this.sleep(2000)
             resolve( _u.jsonOK( {login:false, 
                 message: messages.errNotUserFoundByEmail,
                 code: errCodes.errNotUserFoundByEmail

@@ -59,7 +59,6 @@ describe('login testing', ()=>{
     let newId
 
     it('create new user', async ()=>{
-        try{
             //let password = generator.generate({
             //    length: 10,
             //    numbers: true
@@ -77,10 +76,7 @@ describe('login testing', ()=>{
             expect(result).toBeDefined()
             expect(result.result).toEqual(true)
             expect(result.data.id).toBeTruthy()
-        }catch(err){
-            console.log(err) //eslint-disable-line
-            expect(false).toEqual(true)
-        }
+        
     })
     
     it('login ok', async()=>{ 
@@ -113,7 +109,6 @@ describe('login testing', ()=>{
     })
 
     it('delete existing user', async()=>{ 
-        try{
             const result = await userLayer.deleteUserById(undefined,newId,false)
         
             expect(result).toBeDefined()
@@ -121,10 +116,7 @@ describe('login testing', ()=>{
             expect(result.data.deleted).toBeDefined()
             expect(result.data.deleted).toEqual(true)
 
-        }catch(err){
-            console.log(err) //eslint-disable-line
-            expect(false).toEqual(true)
-        }
+        
     })
 
 })

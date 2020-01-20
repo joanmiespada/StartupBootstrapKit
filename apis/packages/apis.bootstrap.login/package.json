@@ -11,6 +11,7 @@
     "@babel/core": "^7.8.3",
     "@babel/node": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
+    "babel-eslint": "^10.0.3",
     "chance": "^1.1.4",
     "cofeescript": "^0.0.1-security",
     "dotenv-webpack": "^1.7.0",
@@ -30,7 +31,7 @@
   "scripts": {
     "pretest": "eslint -c ../../.eslintrc ./src",
     "start": "NODE_ENV=development ENVFILE=../../../.env/env02.env babel-node ./src/index.js --inspect ",
-    "nodemon": "NODE_ENV=development ENVFILE=../../../.env/env02.env nodemon ./src/index.js --config ../../nodemon.json --exec babel-node",
+    "nodemon": "NODE_ENV=development ENVFILE=../../../.env/env02.env nodemon ./src/index.js --config ../../nodemon.json --exec babel-node --inspect",
     "build-raw": "babel src -d dist",
     "test": "echo --noTests--",
     "test-easy": "echo --noTests--",
