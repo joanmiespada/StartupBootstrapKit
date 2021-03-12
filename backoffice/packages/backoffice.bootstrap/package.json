@@ -68,7 +68,7 @@
     "react": "^16.4.0",
     "react-app": "^1.1.2",
     "react-chartist": "^0.13.1",
-    "react-dev-utils": "^5.0.1",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.4.0",
     "react-google-maps": "^9.4.5",
     "react-hot-loader": "^4.2.0",
