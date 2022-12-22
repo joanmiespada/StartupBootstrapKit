@@ -44,7 +44,7 @@
     "firebase-admin": "^8.9.1",
     "helmet": "^3.21.2",
     "immutable": "^4.0.0-rc.12",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "log4js": "^6.1.0",
     "method-override": "^3.0.0",
     "minimist": "^1.2.0",
