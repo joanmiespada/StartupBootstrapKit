@@ -21,7 +21,7 @@
     "expect": "^24.9.0",
     "generate-password": "^1.5.0",
     "jest": "^24.9.0",
-    "mocha": "^7.0.0",
+    "mocha": "^10.2.0",
     "mongodb-memory-server": "^6.2.2"
   },
   "scripts": {
